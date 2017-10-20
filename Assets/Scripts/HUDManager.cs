@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHUD : MonoBehaviour {
+public class HUDManager : MonoBehaviour {
 
     public Text textObject;
     private float startTime;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         startTime = Time.time;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         float t = Time.time - startTime;
 
         string minutes = ((int)t / 60).ToString();
         string seconds = (t % 60).ToString("f0");
         textObject.text = minutes + ":" + seconds;
-	}
+    }
 }
