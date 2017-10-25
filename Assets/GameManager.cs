@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager> {
 
     [SerializeField]
-    RobotZombieBehaviour BoidsManager;
+    public RobotZombieBehaviour BoidsManager;
 
     int roundNumber = 0;
     Timer roundTimer;
@@ -22,6 +22,11 @@ public class GameManager : Singleton<GameManager> {
 		if (roundTimer.Trigger())
         {
             //END OF ROUND CODE
+            //spawn zombos until we reach the right number
+
+            //calculate distance from goal if there is one
+
+            // go back to play mode
             roundNumber++;
         }
 	}

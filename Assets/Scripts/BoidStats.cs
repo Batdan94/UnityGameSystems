@@ -90,4 +90,15 @@ public class BoidStats : MonoBehaviour {
         newBorn.GetComponent<BoidStats>().ApplyStatsVisuals();
         yield return null;
     }
+
+    public IEnumerator squash(GameObject obj)
+    {
+        obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
+        obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
+        obj.transform.localRotation = Quaternion.identity;
+        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        yield return new WaitForSeconds(3.0f);
+        //obj.SetActive(false);
+        yield return null;
+    }
 }
