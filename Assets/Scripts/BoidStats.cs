@@ -15,14 +15,8 @@ public class BoidStats : MonoBehaviour {
 
     [SerializeField]
     private MeshRenderer coloredRegion;
-
     public GameObject boidPrefab;
-
     public Transform hatPlace;
-
-    //public float breedTimer = 2.0f;
-
-    //public int count = 0;
 
     public void generateStats()
     {
@@ -39,7 +33,6 @@ public class BoidStats : MonoBehaviour {
         float mappedScale = Utils.Map(size, 0.0f, 10.0f, 0.5f, 1.5f);
         transform.localScale = new Vector3(mappedScale, mappedScale, mappedScale);
         hatPlace.localPosition = new Vector3(0.0f, .5f, 0.0f);
-        hatSelect();
     }
 
     public void hatSelect()
@@ -64,6 +57,8 @@ public class BoidStats : MonoBehaviour {
     void Start() {
         generateStats();
         ApplyStatsVisuals();
+        hatSelect();
+
     }
 
     // Update is called once per frame
@@ -82,7 +77,17 @@ public class BoidStats : MonoBehaviour {
         nbStats.color.r = Mathf.Max(0.0f, Mathf.Min(1.0f, (boid1.color.r + boid2.color.r / 2) + Random.Range(-0.01f, 0.01f)));
         nbStats.color.g = Mathf.Max(0.0f, Mathf.Min(1.0f, (boid1.color.g + boid2.color.g / 2) + Random.Range(-0.01f, 0.01f)));
         nbStats.color.b = Mathf.Max(0.0f, Mathf.Min(1.0f, (boid1.color.b + boid2.color.b / 2) + Random.Range(-0.01f, 0.01f)));
-
+        nbStats.StartCoroutine(nbStats.babyTime(nbStats, nbStats.size));
         return newBorn;
+    }
+
+    IEnumerator babyTime(BoidStats newBorn, float size)
+    {
+        newBorn.size /= 2;
+        newBorn.GetComponent<BoidStats>().ApplyStatsVisuals();
+        yield return new WaitForSeconds(3.0f);
+        newBorn.size *= 2;
+        newBorn.GetComponent<BoidStats>().ApplyStatsVisuals();
+        yield return null;
     }
 }
