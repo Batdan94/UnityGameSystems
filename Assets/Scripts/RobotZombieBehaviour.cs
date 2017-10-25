@@ -48,8 +48,9 @@ public class RobotZombieBehaviour : MonoBehaviour
             v2 = Alignment(i);
             v3 = Cohesion(i);
             Vector3 velocity = v1 + v2 + v3;
-            Vector3 acceleration = EdgeAvoidance(velocity, i) * Time.deltaTime;
-            robotZombies[i].GetComponent<Rigidbody>().AddForce(acceleration); 
+            Vector3 acceleration = velocity* Time.deltaTime;
+            robotZombies[i].GetComponent<Rigidbody>().AddForce(acceleration);
+            robotZombies[i].GetComponent<Rigidbody>().velocity = EdgeAvoidance(robotZombies[i].GetComponent<Rigidbody>().velocity, i);
             robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
         }
     }
@@ -101,19 +102,19 @@ public class RobotZombieBehaviour : MonoBehaviour
 
     Vector3 EdgeAvoidance(Vector3 v, int i)
     {
-        if (robotZombies[i].transform.position.x < (plane.transform.localScale.x * 5) - 1)
+        if (robotZombies[i].transform.position.x > (plane.transform.localScale.x * 5) - 1)
         {
             v.x = -3;
         }
-        if (robotZombies[i].transform.position.x > -(plane.transform.localScale.x * 5) + 1)
+        if (robotZombies[i].transform.position.x < -(plane.transform.localScale.x * 5) + 1)
         {
             v.x = 3;
         }
-        if (robotZombies[i].transform.position.z < (plane.transform.localScale.z * 5) - 1)
+        if (robotZombies[i].transform.position.z > (plane.transform.localScale.z * 5) - 1)
         {
             v.z = -3;
         }
-        if (robotZombies[i].transform.position.z > (plane.transform.localScale.z * 5) + 1)
+        if (robotZombies[i].transform.position.z < -(plane.transform.localScale.z * 5) + 1)
         {
             v.z = 3;
         }
