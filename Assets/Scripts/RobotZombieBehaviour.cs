@@ -6,19 +6,39 @@ public class RobotZombieBehaviour : MonoBehaviour
 {
     public GameObject[] robotZombies;
     public GameObject prefab;
+    [Range(0, 100)]
     public int numZombos;
-    public float range;
+    [Range(0, 50)]
+    public float spawnRange;
+    [Range(0.0f, 10.0f)]
     public float speed;
-    public float spawnHeight; 
+    [Range(1.0f, 10.0f)]
+    public float spawnHeight;
+    [Range(0.0f, 10.0f)]
+    public float edgeRepelForce;
+    [Range(0.1f, 1.0f)]
+    public float edgeRepelIntensity;
+    [Range(1.0f, 5.0f)]
+    public float seperationModifier;
+    [Range(1.0f, 5.0f)]
+    public float alignmentModifier;
+    [Range(1.0f, 5.0f)]
+    public float cohesionModifier;
+    [Range(0.0f, 10.0f)]
     public float seperationDistance;
+    [Range(0.0f, 10.0f)]
     public float alignmentDistance;
+    [Range(0.0f, 10.0f)]
     public float cohesionDistance;
+    
     public GameObject plane; 
 
 	// Use this for initialization
 	void Start ()
     {
-        robotZombies = new GameObject[numZombos]; 
+        robotZombies = new GameObject[numZombos];
+        if (spawnRange > plane.transform.localScale.x * 5)
+            spawnRange = plane.transform.localScale.x * 5; 
         SpawnZombos(numZombos); 
 	}
 
@@ -28,7 +48,7 @@ public class RobotZombieBehaviour : MonoBehaviour
         {
             //robotZombies[i] = new GameObject("Robot Zombie");
             Debug.Log("Spawned Zombo"); 
-            Vector3 location = new Vector3(Random.Range(-range, range), spawnHeight, Random.Range(-range, range));
+            Vector3 location = new Vector3(Random.Range(-spawnRange, spawnRange), spawnHeight, Random.Range(-spawnRange, spawnRange));
             robotZombies[i] = Instantiate(prefab, location, Quaternion.identity) as GameObject;
             robotZombies[i].transform.parent = transform;
             //robotZombies[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ; 
@@ -44,14 +64,14 @@ public class RobotZombieBehaviour : MonoBehaviour
         //Get typelist
         for (int i = 0; i < robotZombies.Length; ++i)
         {
-            v1 = Separation(i);
-            v2 = Alignment(i);
-            v3 = Cohesion(i);
+            v1 = Separation(i) * seperationModifier;
+            v2 = Alignment(i) * alignmentModifier;
+            v3 = Cohesion(i) * cohesionModifier;
             Vector3 velocity = v1 + v2 + v3;
-            Vector3 acceleration = velocity* Time.deltaTime;
-            robotZombies[i].GetComponent<Rigidbody>().AddForce(acceleration);
+            robotZombies[i].GetComponent<Rigidbody>().AddForce(velocity * speed * Time.deltaTime);
             robotZombies[i].GetComponent<Rigidbody>().velocity = EdgeAvoidance(robotZombies[i].GetComponent<Rigidbody>().velocity, i);
-            robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
+            //robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
+
         }
     }
 
@@ -61,12 +81,10 @@ public class RobotZombieBehaviour : MonoBehaviour
         
         foreach (GameObject ro in robotZombies)
         {
-            if (robotZombies[i] != ro)
-            if (Vector3.Distance(robotZombies[i].transform.position, ro.transform.position) < seperationDistance)
-            {
-                //Debug.Log("Distance = " + Vector3.Distance(robotZombies[i].transform.position, ro.transform.position).ToString());
-                separationForce += Vector3.MoveTowards(robotZombies[i].transform.position, ro.transform.position, speed * Time.deltaTime);
-            }
+            float dist = Vector3.Distance(robotZombies[i].transform.position, ro.transform.position);
+            if (robotZombies[i] != ro && dist < seperationDistance && dist != 0)
+                separationForce += (ro.transform.position + robotZombies[i].transform.position) / dist;
+            
         }
         return separationForce; 
     }
@@ -75,48 +93,47 @@ public class RobotZombieBehaviour : MonoBehaviour
         Vector3 alignmentForce = Vector3.zero; 
         foreach (GameObject ro in robotZombies)
         {
-            if (robotZombies[i] != ro)
-                if (Vector3.Distance(robotZombies[i].transform.position, ro.transform.position) < alignmentDistance)
-                {
-                    alignmentForce += ro.GetComponent<Rigidbody>().velocity; 
-                }
+            float dist = Vector3.Distance(robotZombies[i].transform.position, ro.transform.position);
+            if (robotZombies[i] != ro && dist < alignmentDistance && dist != 0)
+                    alignmentForce += ro.GetComponent<Rigidbody>().velocity / dist; 
         }
     
-                return alignmentForce;
+                return alignmentForce.normalized;
     }
     Vector3 Cohesion(int i)
     {
         Vector3 centerOfMass = Vector3.zero;
         foreach (GameObject ro in robotZombies)
         {
-            if (robotZombies[i] != ro)
-            {
-                if (Vector3.Distance(robotZombies[i].transform.position, ro.transform.position) < cohesionDistance)
-                {
-                    centerOfMass += ro.transform.position;
-                }
-            }
+            float dist = Vector3.Distance(robotZombies[i].transform.position, ro.transform.position);
+            if (robotZombies[i] != ro && dist < cohesionDistance && dist != 0)
+                  centerOfMass -= ro.transform.position / dist;
+            
         }
        return centerOfMass;
     }
 
     Vector3 EdgeAvoidance(Vector3 v, int i)
     {
-        if (robotZombies[i].transform.position.x > (plane.transform.localScale.x * 5) - 1)
+        float dist = Mathf.Abs(robotZombies[i].transform.position.x - (plane.transform.localScale.x * 5));
+        if (dist < 5)
         {
-            v.x = -3;
+            v.x = -edgeRepelForce / (dist * edgeRepelIntensity);
         }
-        if (robotZombies[i].transform.position.x < -(plane.transform.localScale.x * 5) + 1)
+        float dist1 = Mathf.Abs(robotZombies[i].transform.position.x - (-plane.transform.localScale.x * 5));
+        if (dist1 < 5)
         {
-            v.x = 3;
+            v.x = edgeRepelForce / (dist1 * edgeRepelIntensity);
         }
-        if (robotZombies[i].transform.position.z > (plane.transform.localScale.z * 5) - 1)
+        float dist2 = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
+        if (dist2 > -5)
         {
-            v.z = -3;
+            v.z = -edgeRepelForce / (dist2 * edgeRepelIntensity);
         }
-        if (robotZombies[i].transform.position.z < -(plane.transform.localScale.z * 5) + 1)
+        float dist3 = Mathf.Abs(robotZombies[i].transform.position.z - (-plane.transform.localScale.z * 5));
+        if (dist3 < 5)
         {
-            v.z = 3;
+            v.z = edgeRepelForce / (dist3 * edgeRepelIntensity);
         }
         return v;
     }
