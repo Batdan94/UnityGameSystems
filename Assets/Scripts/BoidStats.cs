@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BoidStats : MonoBehaviour {
 
+
+    private bool displayStats = false;
+    Vector3 screenPosition;
+
     [Range(0.0f, 10.0f)]
     public float size;          //fitness
     [Range(0.0f, 10.0f)]
@@ -19,6 +23,27 @@ public class BoidStats : MonoBehaviour {
     public Transform hatPlace;
 
     public bool squished = false;
+
+    void OnMouseOver()
+    {
+        displayStats = true;
+    }
+    void OnMouseExit()
+    {
+        displayStats = false;
+    }
+
+    void OnGUI()
+    {
+        screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        screenPosition.y = Screen.height - screenPosition.y;
+
+        if (displayStats == true)
+        {
+
+            GUI.Box(new Rect(screenPosition.x, screenPosition.y + 25, 110, 50), "Size: " + size + "\nWealth: " + wealth + "\nHealth: " + heatlh);
+        }
+    }
 
     public void generateStats()
     {
