@@ -18,6 +18,8 @@ public class BoidStats : MonoBehaviour {
     public GameObject boidPrefab;
     public Transform hatPlace;
 
+    public bool squished = false;
+
     public void generateStats()
     {
         size = Random.Range(0.0f, 10.0f);
@@ -66,9 +68,11 @@ public class BoidStats : MonoBehaviour {
 
     }
 
-    static GameObject breed(BoidStats boid1, BoidStats boid2, GameObject boidPrefab)
+    public static GameObject breed(BoidStats boid1, BoidStats boid2, GameObject boidPrefab)
     {
-        GameObject newBorn = Instantiate(boidPrefab, boid1.transform.position, Quaternion.identity);
+        Vector3 spawnLoc = (boid1.transform.position + boid2.transform.position) / 2;
+        spawnLoc.y = RobotZombieBehaviour.Instance.spawnHeight;
+        GameObject newBorn = Instantiate(boidPrefab, spawnLoc, Quaternion.identity);
 
         var nbStats = newBorn.GetComponent<BoidStats>();
         nbStats.size = Mathf.Max(0.0f, Mathf.Min(10.0f, (boid1.size + boid2.size / 2) + Random.Range(-0.1f, 0.1f)));
@@ -77,17 +81,17 @@ public class BoidStats : MonoBehaviour {
         nbStats.color.r = Mathf.Max(0.0f, Mathf.Min(1.0f, (boid1.color.r + boid2.color.r / 2) + Random.Range(-0.01f, 0.01f)));
         nbStats.color.g = Mathf.Max(0.0f, Mathf.Min(1.0f, (boid1.color.g + boid2.color.g / 2) + Random.Range(-0.01f, 0.01f)));
         nbStats.color.b = Mathf.Max(0.0f, Mathf.Min(1.0f, (boid1.color.b + boid2.color.b / 2) + Random.Range(-0.01f, 0.01f)));
-        nbStats.StartCoroutine(nbStats.babyTime(nbStats, nbStats.size));
+        //nbStats.StartCoroutine(nbStats.babyTime(nbStats, nbStats.size));
         return newBorn;
     }
 
     IEnumerator babyTime(BoidStats newBorn, float size)
     {
         newBorn.size /= 2;
-        newBorn.GetComponent<BoidStats>().ApplyStatsVisuals();
+        newBorn.ApplyStatsVisuals();
         yield return new WaitForSeconds(3.0f);
-        newBorn.size *= 2;
-        newBorn.GetComponent<BoidStats>().ApplyStatsVisuals();
+        newBorn.size = size;
+        newBorn.ApplyStatsVisuals();
         yield return null;
     }
 
@@ -97,6 +101,8 @@ public class BoidStats : MonoBehaviour {
         obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
         obj.transform.localRotation = Quaternion.identity;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        squished = true;
+
         yield return new WaitForSeconds(3.0f);
         //obj.SetActive(false);
         yield return null;
