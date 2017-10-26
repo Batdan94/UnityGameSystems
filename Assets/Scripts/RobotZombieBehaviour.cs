@@ -26,6 +26,8 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
     public float alignmentModifier;
     [Range(1.0f, 5.0f)]
     public float cohesionModifier;
+	[Range(1.0f, 4.0f)]
+	public float threatModifier;
     [Range(0.0f, 10.0f)]
     public float separationDistance;
     [Range(0.0f, 10.0f)]
@@ -66,6 +68,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
         Vector3 v1 = Vector3.zero; 
         Vector3 v2 = Vector3.zero;
         Vector3 v3 = Vector3.zero;
+		Vector3 v4 = Vector3.zero;
         //Get typelist
         for (int i = 0; i < robotZombies.Count; ++i)
         {
@@ -77,18 +80,23 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
             v1 = Separation(i);
             v2 = Alignment(i);
             v3 = Cohesion(i);
-            Vector3 velocity = v1 + v2 + v3;
+			v4 = Threat(i);
+            Vector3 velocity = v1 + v2 + v3 + v4;
 			velocity.y = 0.0f;
 			rb.AddForce(velocity * speed * Time.deltaTime);
             rb.AddForce(EdgeAvoidance(rb.velocity, i));
 			//rb.velocity = new Vector3(rb.velocity.x, Mathf.Min(0.0f, rb.velocity.y), rb.velocity.z);
             if (rb.velocity.magnitude > maxSpeed)
             {
-                rb.velocity = rb.velocity.normalized * maxSpeed;
+				var vel = rb.velocity.normalized * maxSpeed;
+				vel.y = -0.1f;
+				rb.velocity = vel;
             }
             else if (rb.velocity.magnitude < minSpeed)
             {
-                rb.velocity = rb.velocity.normalized * minSpeed;
+				var vel = rb.velocity.normalized * minSpeed;
+				vel.y = 0.0f;
+				rb.velocity = vel;
             }
             //robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
 
@@ -157,6 +165,17 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
         }
        return centerOfMass;
     }
+
+	Vector3 Threat(int i)
+	{
+		var vec = new Vector3 ();
+		foreach (var tr in GameObject.FindObjectsOfType<ThreatValue>()) {
+			if (Vector3.Distance (tr.transform.position, robotZombies [i].transform.position) < tr.threat * 5) {
+				vec += (robotZombies [i].transform.position - tr.transform.position).normalized * tr.threat * threatModifier;
+			}
+		}
+		return vec;
+	}
 
     Vector3 EdgeAvoidance(Vector3 v, int i)
     {

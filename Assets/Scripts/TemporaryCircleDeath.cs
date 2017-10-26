@@ -8,6 +8,8 @@ public class TemporaryCircleDeath : MonoBehaviour {
 
     public GameObject fist;
 
+	public GameObject threat;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -43,6 +45,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
     void attack()
     {
         var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
+		Instantiate (threat, new Vector3 (Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
         StartCoroutine(raisingFist(fistInstance));
         foreach(var boid in GameManager.Instance.BoidsManager.robotZombies)
         {
@@ -55,8 +58,8 @@ public class TemporaryCircleDeath : MonoBehaviour {
                    Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), Circle.transform.position) < (Circle.GetComponent<Circle>().xradius * 2))
             {
                 Debug.Log("Is within Blast radius");
-                boid.GetComponent<Rigidbody>().AddExplosionForce(100.0f, Circle.transform.position, Circle.GetComponent<Circle>().xradius * 2);
-                boid.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10000, 0));
+                boid.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, Circle.transform.position, Circle.GetComponent<Circle>().xradius * 2);
+                boid.GetComponent<Rigidbody>().AddForce(new Vector3(0, 3000, 0));
             }
         }
     }
