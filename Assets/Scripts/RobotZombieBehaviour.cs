@@ -78,8 +78,10 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
             v2 = Alignment(i);
             v3 = Cohesion(i);
             Vector3 velocity = v1 + v2 + v3;
-            rb.AddForce(velocity * speed * Time.deltaTime);
+			velocity.y = 0.0f;
+			rb.AddForce(velocity * speed * Time.deltaTime);
             rb.AddForce(EdgeAvoidance(rb.velocity, i));
+			//rb.velocity = new Vector3(rb.velocity.x, Mathf.Min(0.0f, rb.velocity.y), rb.velocity.z);
             if (rb.velocity.magnitude > maxSpeed)
             {
                 rb.velocity = rb.velocity.normalized * maxSpeed;
