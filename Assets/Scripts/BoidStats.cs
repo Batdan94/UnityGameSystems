@@ -40,7 +40,6 @@ public class BoidStats : MonoBehaviour {
 
         if (displayStats == true)
         {
-
             GUI.Box(new Rect(screenPosition.x, screenPosition.y + 25, 110, 50), "Size: " + size + "\nWealth: " + wealth + "\nHealth: " + heatlh);
         }
     }
