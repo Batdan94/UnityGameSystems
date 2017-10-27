@@ -22,8 +22,7 @@ public class GameManager : Singleton<GameManager> {
     {
 		if (!AnyZombosLeft())
         {
-            //END OF ROUND CODE
-            //spawn zombos until we reach the right number
+			//Remove all dead zombos
             foreach(var ro in BoidsManager.robotZombies)
             {
                 if (ro.GetComponent<BoidStats>().squished)
@@ -32,6 +31,8 @@ public class GameManager : Singleton<GameManager> {
                 }
             }
             BoidsManager.robotZombies.RemoveAll(zombo => zombo == null);
+
+			//Reset standard values
             BoidsManager.SetHasAttacked(false);
             foreach (var zombo in BoidsManager.robotZombies)
                 if (zombo.active == false)
@@ -42,23 +43,25 @@ public class GameManager : Singleton<GameManager> {
                     zombo.GetComponent<BoidStats>().hasBred = false; 
                 }
 
+			//Breeding
             int initialZombos = BoidsManager.robotZombies.Count;
-            foreach (var zombo in BoidsManager.robotZombies)
-            {
-                GameObject closestZombo = null;
-                if (zombo.GetComponent<BoidStats>().hasBred)
+			for (int i = 0; i < initialZombos ; i++)
+			{
+				GameObject closestZombo = null;
+				if (BoidsManager.robotZombies[i].GetComponent<BoidStats>().hasBred)
                     return; 
                 //Find closest ZombieRobot to this zombo
-                foreach (var zomb in BoidsManager.robotZombies)
-                {
+				for (int j = i+1; j < initialZombos ; j++)
+				{
                     if (closestZombo == null)
-                        closestZombo = zomb;
-                    if (zombo != zomb && !zomb.GetComponent<BoidStats>().hasBred)
-                        if (Vector3.Distance(zombo.transform.position, zomb.transform.position) < Vector3.Distance(zombo.transform.position, closestZombo.transform.position))
-                            closestZombo = zomb; 
+						closestZombo = BoidsManager.robotZombies[j];
+					if (BoidsManager.robotZombies[i] != BoidsManager.robotZombies[j] && !BoidsManager.robotZombies[j].GetComponent<BoidStats>().hasBred)
+					if (Vector3.Distance(BoidsManager.robotZombies[i].transform.position, BoidsManager.robotZombies[j].transform.position) < 
+						Vector3.Distance(BoidsManager.robotZombies[i].transform.position, closestZombo.transform.position))
+						closestZombo = BoidsManager.robotZombies[j]; 
                 }
-                BoidsManager.robotZombies.Add(BoidStats.breed(zombo.GetComponent<BoidStats>(), closestZombo.GetComponent<BoidStats>(), BoidsManager.prefab));
-                zombo.GetComponent<BoidStats>().hasBred = true;
+				BoidsManager.robotZombies.Add(BoidStats.breed(BoidsManager.robotZombies[i].GetComponent<BoidStats>(), closestZombo.GetComponent<BoidStats>(), BoidsManager.prefab));
+				BoidsManager.robotZombies[i].GetComponent<BoidStats>().hasBred = true;
                 closestZombo.GetComponent<BoidStats>().hasBred = true; 
             }
             //calculate distance from goal if there is one
