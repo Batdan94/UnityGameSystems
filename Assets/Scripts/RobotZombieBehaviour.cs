@@ -42,9 +42,9 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
     private bool hasAttacked = false; 
     public GameObject plane; 
     public void setHasAttacked(bool set) { hasAttacked = set; }
-
-	// Use this for initialization
-	void Start ()
+    public Vector3 getRandomSpawn() { return new Vector3(Random.Range(-spawnRange, spawnRange), spawnHeight, Random.Range(-spawnRange, spawnRange)); }
+    // Use this for initialization
+    void Start ()
     {
         robotZombies = new List<GameObject>();
         if (spawnRange > plane.transform.localScale.x * 5)
@@ -57,8 +57,8 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
         for (int i = 0; i < numzombos; ++i)
         {
             //robotZombies[i] = new GameObject("Robot Zombie");
-            Debug.Log("Spawned Zombo"); 
-            Vector3 location = new Vector3(Random.Range(-spawnRange, spawnRange), spawnHeight, Random.Range(-spawnRange, spawnRange));
+            Debug.Log("Spawned Zombo");
+            Vector3 location = getRandomSpawn(); 
             robotZombies.Add(Instantiate(prefab, location, Quaternion.identity));
             robotZombies[i].transform.parent = transform;
             //robotZombies[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ; 
