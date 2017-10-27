@@ -18,6 +18,8 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
     public float spawnHeight;
     [Range(0.0f, 10.0f)]
     public float edgeRepelForce;
+    [Range(0.0f, 100.0f)]
+    public float fleeForce;
     [Range(0.1f, 1.0f)]
     public float edgeRepelIntensity;
     [Range(1.0f, 5.0f)]
@@ -37,8 +39,9 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 
     public float minSpeed;
     public float maxSpeed;
-    
+    private bool hasAttacked = false; 
     public GameObject plane; 
+    public void setHasAttacked(bool set) { hasAttacked = set; }
 
 	// Use this for initialization
 	void Start ()
@@ -69,6 +72,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
         Vector3 v2 = Vector3.zero;
         Vector3 v3 = Vector3.zero;
 		Vector3 v4 = Vector3.zero;
+        Vector3 v5 = Vector3.zero; 
         //Get typelist
         for (int i = 0; i < robotZombies.Count; ++i)
         {
@@ -81,7 +85,9 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
             v2 = Alignment(i);
             v3 = Cohesion(i);
 			v4 = Threat(i);
-            Vector3 velocity = v1 + v2 + v3 + v4;
+            if (hasAttacked == true)
+            v5 = Flee(i); 
+            Vector3 velocity = v1 + v2 + v3 + v4 + v5;
 			velocity.y = 0.0f;
 			if (!(Vector3.Dot (Vector3.up, robotZombies[i].transform.up) <= 0.2f))
 			{
@@ -173,12 +179,29 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 	{
 		var vec = new Vector3 ();
 		foreach (var tr in GameObject.FindObjectsOfType<ThreatValue>()) {
+
 			if (Vector3.Distance (tr.transform.position, robotZombies [i].transform.position) < tr.threat * 5) {
 				vec += (robotZombies [i].transform.position - tr.transform.position).normalized * tr.threat * threatModifier;
 			}
 		}
 		return vec;
 	}
+
+    Vector3 Flee(int i)
+    {
+        Vector3 fleeDirection = Vector3.zero;
+        float distX = Mathf.Abs(robotZombies[i].transform.position.x - (plane.transform.localScale.x * 5));
+        float distZ = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
+        if (fleeForce < 100)
+        fleeForce = fleeForce + 0.001f; 
+        if (distX < 1 || distZ < 1)
+            robotZombies[i].SetActive(false);
+        if (distX > distZ)
+            fleeDirection = new Vector3(0, 0, fleeForce);
+        else
+            fleeDirection = new Vector3(fleeForce, 0, 0);
+        return fleeDirection; 
+    }
 
     Vector3 EdgeAvoidance(Vector3 v, int i)
     {
