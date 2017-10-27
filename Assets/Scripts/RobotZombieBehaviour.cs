@@ -107,6 +107,10 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 					rb.velocity = vel;
 	            }
 			}
+
+			Vector3 dir = rb.velocity;
+			float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+			rb.transform.localRotation = Quaternion.Lerp(rb.transform.localRotation, Quaternion.AngleAxis(angle, Vector3.up), 0.1f);
             //robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
 
         }
