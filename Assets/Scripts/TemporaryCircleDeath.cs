@@ -12,7 +12,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
@@ -33,6 +33,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
         }
         if (Input.GetMouseButtonDown(0))
         {
+            RobotZombieBehaviour.Instance.setHasAttacked(true);
             attack();
         }
     }
