@@ -16,6 +16,8 @@ public class BoidStats : MonoBehaviour {
     //[Range(0.0f, 10.0f)]
     public Color color;
 
+    public bool hasBred = false; 
+
     [SerializeField]
     private MeshRenderer coloredRegion;
     public GameObject boidPrefab;

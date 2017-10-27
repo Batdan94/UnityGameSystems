@@ -33,7 +33,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
         }
         if (Input.GetMouseButtonDown(0))
         {
-            RobotZombieBehaviour.Instance.setHasAttacked(true);
+            RobotZombieBehaviour.Instance.SetHasAttacked(true);
             attack();
         }
     }
