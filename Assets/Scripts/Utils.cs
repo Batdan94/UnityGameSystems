@@ -9,6 +9,22 @@ public class Utils
         float slope = (maxOut - minOut) / (maxIn - minIn);
         return minOut + slope * (value - minIn);
     }
+
+    public static float NextGaussian()
+    {
+        float U, u, v, S;
+
+        do
+        {
+            u = 2.0f * Random.value - 1.0f;
+            v = 2.0f * Random.value - 1.0f;
+            S = u * u + v * v;
+        }
+        while (S >= 1.0);
+
+        float fac = Mathf.Sqrt(-2.0f * Mathf.Log(S) / S);
+        return u * fac;
+    }
 }
 
 public class Timer
@@ -36,3 +52,5 @@ public class Timer
         return false;
     }
 }
+
+

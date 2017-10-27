@@ -78,33 +78,9 @@ public class GameManager : Singleton<GameManager> {
                     }
                 }
 
-                //var combo = (from left in BoidsManager.robotZombies
-                //             from right in BoidsManager.robotZombies
-                //             where right != left
-                //             where (right.GetComponent<BoidStats>().lovedOne == null && left.GetComponent<BoidStats>().lovedOne == null)
-                //             where (right.GetComponent<BoidStats>().lovedOne = left)
-                //             where (left.GetComponent<BoidStats>().lovedOne = right)
-                //             select new { left, right }).ToArray();
-
                 //TODO Display breeding text and stop attacks
-                //int initialZombos = BoidsManager.robotZombies.Count;
-                //for (int i = 0; i < initialZombos; i++)
-                //{
+                FindObjectOfType<TemporaryCircleDeath>().enabled = false;
 
-                //    GameObject closestZombo = null;
-                //    //Find closest ZombieRobot to this zombo
-                //    for (int j = i + 1; j < initialZombos; j++)
-                //    {
-                //        if (closestZombo == null)
-                //            closestZombo = BoidsManager.robotZombies[j];
-                //        if (BoidsManager.robotZombies[i] != BoidsManager.robotZombies[j] && !BoidsManager.robotZombies[j].GetComponent<BoidStats>().hasBred)
-                //            if (Vector3.Distance(BoidsManager.robotZombies[i].transform.position, BoidsManager.robotZombies[j].transform.position) <
-                //                Vector3.Distance(BoidsManager.robotZombies[i].transform.position, closestZombo.transform.position))
-                //                closestZombo = BoidsManager.robotZombies[j];
-                //    }
-
-                //    BoidsManager.robotZombies[i].GetComponent<BoidStats>().lovedOne = closestZombo;
-                //}
                 foundMatches = true;
             }
             else
@@ -146,6 +122,8 @@ public class GameManager : Singleton<GameManager> {
             breeding = false;
             foundMatches = false;
             barriers.SetActive(false);
+            FindObjectOfType<TemporaryCircleDeath>().enabled = true;
+
 
             //TODO remove breeding text and start attacks again
         }

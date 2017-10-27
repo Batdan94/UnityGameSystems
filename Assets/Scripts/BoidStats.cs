@@ -26,6 +26,7 @@ public class BoidStats : MonoBehaviour {
 	public GameObject hatInst;
 
     public GameObject lovedOne;
+    public GameObject breedingParticles;
 
     public bool squished = false;
 
@@ -130,14 +131,15 @@ public class BoidStats : MonoBehaviour {
         Vector3 spawnLoc = (boid1.transform.position + boid2.transform.position) / 2;
         spawnLoc.y = RobotZombieBehaviour.Instance.spawnHeight;
         GameObject newBorn = Instantiate(boidPrefab, spawnLoc, Quaternion.identity);
+        GameObject parts = Instantiate(boid1.breedingParticles, spawnLoc, boid1.breedingParticles.transform.rotation);
 
         var nbStats = newBorn.GetComponent<BoidStats>();
-		nbStats.size = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.size + boid2.size) / 2) + Random.Range(-0.1f, 0.1f)));
-		nbStats.wealth = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.wealth + boid2.wealth) / 2) + Random.Range(-0.1f, 0.1f)));
-		nbStats.heatlh = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.heatlh + boid2.heatlh) / 2) + Random.Range(-0.1f, 0.1f)));
-		nbStats.color.r = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.r + boid2.color.r) / 2) + Random.Range(-0.01f, 0.01f)));
-		nbStats.color.g = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.g + boid2.color.g) / 2) + Random.Range(-0.01f, 0.01f)));
-		nbStats.color.b = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.b + boid2.color.b) / 2) + Random.Range(-0.01f, 0.01f)));
+		nbStats.size = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.size + boid2.size) / 2) + Utils.NextGaussian()));
+		nbStats.wealth = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.wealth + boid2.wealth) / 2) + Utils.NextGaussian()));
+		nbStats.heatlh = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.heatlh + boid2.heatlh) / 2) + Utils.NextGaussian()));
+		nbStats.color.r = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.r + boid2.color.r) / 2) + Utils.NextGaussian()/10));
+		nbStats.color.g = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.g + boid2.color.g) / 2) + Utils.NextGaussian()/10));
+		nbStats.color.b = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.b + boid2.color.b) / 2) + Utils.NextGaussian()/10));
         nbStats.StartCoroutine(nbStats.babyTime(nbStats, nbStats.size));
         nbStats.removeHat();
         nbStats.ApplyStatsVisuals();
