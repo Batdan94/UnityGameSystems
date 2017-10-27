@@ -26,7 +26,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
     public float alignmentModifier;
     [Range(1.0f, 5.0f)]
     public float cohesionModifier;
-	[Range(1.0f, 4.0f)]
+	[Range(1.0f, 40.0f)]
 	public float threatModifier;
     [Range(0.0f, 10.0f)]
     public float separationDistance;
@@ -83,21 +83,24 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 			v4 = Threat(i);
             Vector3 velocity = v1 + v2 + v3 + v4;
 			velocity.y = 0.0f;
-			rb.AddForce(velocity * speed * Time.deltaTime);
-            rb.AddForce(EdgeAvoidance(rb.velocity, i));
-			//rb.velocity = new Vector3(rb.velocity.x, Mathf.Min(0.0f, rb.velocity.y), rb.velocity.z);
-            if (rb.velocity.magnitude > maxSpeed)
-            {
-				var vel = rb.velocity.normalized * maxSpeed;
-				vel.y = -0.1f;
-				rb.velocity = vel;
-            }
-            else if (rb.velocity.magnitude < minSpeed)
-            {
-				var vel = rb.velocity.normalized * minSpeed;
-				vel.y = 0.0f;
-				rb.velocity = vel;
-            }
+			if (!(Vector3.Dot (Vector3.up, robotZombies[i].transform.up) <= 0.2f))
+			{
+				rb.AddForce (velocity * speed * Time.deltaTime);
+	            rb.AddForce(EdgeAvoidance(rb.velocity, i));
+				//rb.velocity = new Vector3(rb.velocity.x, Mathf.Min(0.0f, rb.velocity.y), rb.velocity.z);
+	            if (rb.velocity.magnitude > maxSpeed)
+	            {
+					var vel = rb.velocity.normalized * maxSpeed;
+					vel.y = -0.1f;
+					rb.velocity = vel;
+	            }
+	            else if (rb.velocity.magnitude < minSpeed)
+	            {
+					var vel = rb.velocity.normalized * minSpeed;
+					vel.y = 0.0f;
+					rb.velocity = vel;
+	            }
+			}
             //robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
 
         }
