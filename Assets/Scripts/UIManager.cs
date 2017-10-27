@@ -21,9 +21,15 @@ public class UIManager : MonoBehaviour
     public Slider wealthSliderGO;
     public Slider populationSliderGO;
 
+	//temp floats
+	float averageWealth;
+	float averageSize;
+	float averagePopulation;
+	int numberOfSpawned;
+
     //manager references
-    RobotZombieBehaviour zombieMngr;
-    GameManager gameMngr;
+    public RobotZombieBehaviour zombieMngr;
+    private GameManager gameMngr;
 
     //objectives list
     private Text[] objectivesList;
@@ -31,6 +37,16 @@ public class UIManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		wealthSliderGO.minValue = 0;
+		sizeSliderGO.minValue = 0;
+		populationSliderGO.minValue = 0;
+
+		wealthSliderGO.maxValue = 100;
+		sizeSliderGO.maxValue = 100;
+		populationSliderGO.maxValue = 100;
+
+		numberOfSpawned = zombieMngr.numZombos;
+
         objectivesList = new Text[12];
 
         objectivesList[0].text = "Have a 100% wealthy population";
@@ -55,6 +71,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		numberOfSpawned = zombieMngr.numZombos;
         updateSliders();
         generationCounter();
     }
@@ -72,10 +89,14 @@ public class UIManager : MonoBehaviour
 
         foreach (var rz in zombieMngr.robotZombies)
         {
-           tempWealth += rz.GetComponent<BoidStats>().wealth;
+			if (rz.GetComponent<BoidStats> ().squished == false) {
+				tempWealth += rz.GetComponent<BoidStats>().wealth;
+			}
         }
 
-        wealthSliderGO.value = (tempWealth / zombieMngr.numZombos);
+		averageWealth = (numberOfSpawned / tempWealth);
+
+		wealthSliderGO.value = (averageWealth * 100);
     }
 
     void populationSlider()
@@ -84,10 +105,14 @@ public class UIManager : MonoBehaviour
 
         foreach (var rz in zombieMngr.robotZombies)
         {
-            tempPopulation += rz.GetComponent<BoidStats>().heatlh;
+			if (rz.GetComponent<BoidStats> ().squished == false) {
+				tempPopulation += rz.GetComponent<BoidStats>().heatlh;
+			}
         }
 
-        wealthSliderGO.value = (tempPopulation / zombieMngr.numZombos);
+		averagePopulation = (numberOfSpawned / tempPopulation);
+
+		populationSliderGO.value = (averagePopulation * 100); 
     }
 
     void sizeSlider()
@@ -96,20 +121,23 @@ public class UIManager : MonoBehaviour
 
         foreach (var rz in zombieMngr.robotZombies)
         {
-            tempSize += rz.GetComponent<BoidStats>().size;
+			if (rz.GetComponent<BoidStats> ().squished == false) {
+				tempSize += rz.GetComponent<BoidStats>().size;
+			} 
         }
+		averageSize = (numberOfSpawned / tempSize);
 
-        wealthSliderGO.value = (tempSize / zombieMngr.numZombos);
+		sizeSliderGO.value = (averageSize * 100);
     }
 
     void objectives()
     {
-        objectivesText = objectivesList[(int)Random.value];
+        objectivesText.text = "Objective: " + objectivesList[(int)Random.value];
     }
 
     void generationCounter()
     {
-        roundText.GetComponent<Text>().text = "Generation Number: " + gameMngr.roundNumber;
+        roundText.GetComponent<Text>().text = "Gen Num: " + GameManager.Instance.roundNumber;
     }
 
     void punchPower()
