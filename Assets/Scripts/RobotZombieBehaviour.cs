@@ -39,9 +39,12 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 
     public float minSpeed;
     public float maxSpeed;
-    private bool hasAttacked = false; 
+    private bool hasAttacked = false;
+    private bool hasBred = false; 
     public GameObject plane; 
-    public void setHasAttacked(bool set) { hasAttacked = set; }
+    public void SetHasAttacked(bool set) { hasAttacked = set; }
+    public void SetHasbred(bool set) { hasBred = set; }
+    public bool HasBred() { return hasBred; }
     public Vector3 getRandomSpawn() { return new Vector3(Random.Range(-spawnRange, spawnRange), spawnHeight, Random.Range(-spawnRange, spawnRange)); }
     // Use this for initialization
     void Start ()
