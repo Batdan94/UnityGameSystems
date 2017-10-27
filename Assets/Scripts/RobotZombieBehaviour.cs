@@ -65,7 +65,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 	// Update is called once per frame
 	void Update ()
     {
-        Vector3 v1 = Vector3.zero; 
+        Vector3 v1 = Vector3.zero;
         Vector3 v2 = Vector3.zero;
         Vector3 v3 = Vector3.zero;
 		Vector3 v4 = Vector3.zero;

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BoidStats : MonoBehaviour {
 
-
     private bool displayStats = false;
     Vector3 screenPosition;
 
