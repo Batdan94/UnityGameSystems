@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager> {
 
             // go back to play mode
             roundNumber++;
+
         }
 	}
 }
