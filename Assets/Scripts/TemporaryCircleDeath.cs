@@ -52,13 +52,15 @@ public class TemporaryCircleDeath : MonoBehaviour {
         {
             if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z) , Circle.transform.position) < Circle.GetComponent<Circle>().xradius)
             {
-                boid.GetComponent<BoidStats>().StartCoroutine(boid.GetComponent<BoidStats>().squash(boid));
+				if (boid.active) {
+					boid.GetComponent<BoidStats> ().StartCoroutine (boid.GetComponent<BoidStats> ().squash (boid));
+				}
                     //boid.gameObject.SetActive(false);
             }
             else if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), Circle.transform.position) > Circle.GetComponent<Circle>().xradius &&
                    Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), Circle.transform.position) < (Circle.GetComponent<Circle>().xradius * 2))
             {
-                Debug.Log("Is within Blast radius");
+                //Debug.Log("Is within Blast radius");
                 boid.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, Circle.transform.position, Circle.GetComponent<Circle>().xradius * 2);
                 boid.GetComponent<Rigidbody>().AddForce(new Vector3(0, 3000, 0));
             }
