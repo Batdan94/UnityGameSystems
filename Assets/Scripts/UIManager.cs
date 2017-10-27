@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public Slider wealthSliderGO;
     public Slider populationSliderGO;
     RobotZombieBehaviour zombieMngr;
+    GameManager gameMngr;
 
 
     // Use this for initialization
