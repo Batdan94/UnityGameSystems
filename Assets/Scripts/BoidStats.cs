@@ -21,6 +21,7 @@ public class BoidStats : MonoBehaviour {
     private MeshRenderer coloredRegion;
     public GameObject boidPrefab;
     public Transform hatPlace;
+	public GameObject hatInst;
 
     public bool squished = false;
 
@@ -49,6 +50,7 @@ public class BoidStats : MonoBehaviour {
         size = Random.Range(0.0f, 10.0f);
         wealth = Random.Range(0.0f, 10.0f);
         heatlh = Random.Range(0.0f, 10.0f);
+		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));
         color = Random.ColorHSV(0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
         coloredRegion.material.color = color;
     }
@@ -59,25 +61,31 @@ public class BoidStats : MonoBehaviour {
         float mappedScale = Utils.Map(size, 0.0f, 10.0f, 0.5f, 1.5f);
         transform.localScale = new Vector3(mappedScale, mappedScale, mappedScale);
         hatPlace.localPosition = new Vector3(0.0f, .5f, 0.0f);
+		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));
     }
 
     public void hatSelect()
     {
         string hatLocation = "Hats/";
         if (wealth < 2.0f)
-            hatLocation += "Beanie";
-        else if(wealth >= 2.0f && wealth < 4.0f)
-            hatLocation += "Cap";
-        else if (wealth >= 4.0f && wealth < 6.0f)
             hatLocation += "None";
+        else if(wealth >= 2.0f && wealth < 4.0f)
+            hatLocation += "Beanie";
+        else if (wealth >= 4.0f && wealth < 6.0f)
+            hatLocation += "Cap";
         else if (wealth >= 6.0f && wealth < 8.0f)
             hatLocation += "Bowler";
         else
             hatLocation += "TopHat";
 
         GameObject hat = Resources.Load(hatLocation) as GameObject;
-        GameObject hatInst = Instantiate(hat, hatPlace.position, hatPlace.rotation, transform);
+        hatInst = Instantiate(hat, hatPlace.position, hatPlace.rotation, transform);
     }
+
+	public void removeHat()
+	{
+		Destroy (hatInst);
+	}
 
     // Use this for initialization
     void Start() {
