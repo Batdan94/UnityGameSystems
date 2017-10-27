@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     //manager references
     public RobotZombieBehaviour zombieMngr;
     private GameManager gameMngr;
+	public BoidStats getNum;
 
     //objectives list
     private Text[] objectivesList;
@@ -94,7 +95,7 @@ public class UIManager : MonoBehaviour
 			}
         }
 
-		averageWealth = (numberOfSpawned / tempWealth);
+		averageWealth = ((numberOfSpawned - getNum.numSquished) / tempWealth);
 
 		wealthSliderGO.value = (averageWealth * 100);
     }
@@ -110,7 +111,7 @@ public class UIManager : MonoBehaviour
 			}
         }
 
-		averagePopulation = (numberOfSpawned / tempPopulation);
+		averagePopulation = ((numberOfSpawned - getNum.numSquished) / tempPopulation);
 
 		populationSliderGO.value = (averagePopulation * 100); 
     }
@@ -123,9 +124,9 @@ public class UIManager : MonoBehaviour
         {
 			if (rz.GetComponent<BoidStats> ().squished == false) {
 				tempSize += rz.GetComponent<BoidStats>().size;
-			} 
+			}
         }
-		averageSize = (numberOfSpawned / tempSize);
+		averageSize = ((numberOfSpawned - getNum.numSquished) / tempSize);
 
 		sizeSliderGO.value = (averageSize * 100);
     }

@@ -6,7 +6,7 @@ public class GameManager : Singleton<GameManager> {
 
     [SerializeField]
     public RobotZombieBehaviour BoidsManager;
-
+	public UIManager UImngr;
     public int roundNumber = 0;
     //Timer roundTimer;
     [SerializeField]
@@ -62,7 +62,7 @@ public class GameManager : Singleton<GameManager> {
                 closestZombo.GetComponent<BoidStats>().hasBred = true; 
             }
             //calculate distance from goal if there is one
-
+			 
             // go back to play mode
             roundNumber++;
 
