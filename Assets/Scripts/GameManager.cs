@@ -8,18 +8,19 @@ public class GameManager : Singleton<GameManager> {
     public RobotZombieBehaviour BoidsManager;
 
     public int roundNumber = 0;
-    Timer roundTimer;
+    //Timer roundTimer;
     [SerializeField]
-    float timePerRound;
+    //float timePerRound;
 
 	// Use this for initialization
 	void Start () {
-       roundTimer = new Timer(timePerRound);
+       //roundTimer = new Timer(timePerRound);
     }
 	
 	// Update is called once per frame
-	void Update () {
-		if (roundTimer.Trigger())
+	void Update ()
+    {
+		if (!AnyZombosLeft())
         {
             //END OF ROUND CODE
             //spawn zombos until we reach the right number
@@ -31,12 +32,34 @@ public class GameManager : Singleton<GameManager> {
                 }
             }
             BoidsManager.robotZombies.RemoveAll(zombo => zombo == null);
+            BoidsManager.SetHasAttacked(false);
+            foreach (var zombo in BoidsManager.robotZombies)
+                if (zombo.active == false)
+                {
+                    zombo.SetActive(true);
+                    zombo.transform.position = BoidsManager.GetComponent<RobotZombieBehaviour>().getRandomSpawn();
+                    zombo.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    zombo.GetComponent<BoidStats>().hasBred = false; 
+                }
+
             int initialZombos = BoidsManager.robotZombies.Count;
-            for (int i = 0; i < BoidsManager.numZombos - initialZombos; i++)
+            foreach (var zombo in BoidsManager.robotZombies)
             {
-                BoidsManager.robotZombies.Add(BoidStats.breed(BoidsManager.robotZombies[Random.Range(0, initialZombos)].GetComponent<BoidStats>(), 
-                                                                BoidsManager.robotZombies[Random.Range(0, initialZombos)].GetComponent<BoidStats>(), 
-                                                                BoidsManager.prefab));
+                GameObject closestZombo = null;
+                if (zombo.GetComponent<BoidStats>().hasBred)
+                    return; 
+                //Find closest ZombieRobot to this zombo
+                foreach (var zomb in BoidsManager.robotZombies)
+                {
+                    if (closestZombo == null)
+                        closestZombo = zomb;
+                    if (zombo != zomb && !zomb.GetComponent<BoidStats>().hasBred)
+                        if (Vector3.Distance(zombo.transform.position, zomb.transform.position) < Vector3.Distance(zombo.transform.position, closestZombo.transform.position))
+                            closestZombo = zomb; 
+                }
+                BoidsManager.robotZombies.Add(BoidStats.breed(zombo.GetComponent<BoidStats>(), closestZombo.GetComponent<BoidStats>(), BoidsManager.prefab));
+                zombo.GetComponent<BoidStats>().hasBred = true;
+                closestZombo.GetComponent<BoidStats>().hasBred = true; 
             }
             //calculate distance from goal if there is one
 
@@ -45,4 +68,13 @@ public class GameManager : Singleton<GameManager> {
 
         }
 	}
+
+    bool AnyZombosLeft()
+    {
+        foreach (var zombo in BoidsManager.robotZombies)
+            if (zombo.active && !zombo.GetComponent<BoidStats>().squished)
+                return true;
+
+        return false; 
+    }
 }
