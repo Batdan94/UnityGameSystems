@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: d66c84cea9e60fd448dba6bb49618a34
+timeCreated: 1509109944
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: MisterVampire
+  fontNames:
+  - MisterVampire
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
