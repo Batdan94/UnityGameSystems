@@ -15,6 +15,10 @@ public class Timer
 {
     public float startTime;
     public float timeToTrigger;
+    public float timeLeft
+    {
+        get { return timeToTrigger - (Time.time - startTime); }
+    }
 
     public Timer(float _timeToTrigger)
     {

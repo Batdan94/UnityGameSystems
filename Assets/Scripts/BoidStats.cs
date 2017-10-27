@@ -25,6 +25,8 @@ public class BoidStats : MonoBehaviour {
     public Transform hatPlace;
 	public GameObject hatInst;
 
+    public GameObject lovedOne;
+
     public bool squished = false;
 
     void OnMouseOver()
@@ -90,7 +92,7 @@ public class BoidStats : MonoBehaviour {
 	}
 
     // Use this for initialization
-    void Start() {
+    void Awake() {
 		numSquished = 0;
         generateStats();
         ApplyStatsVisuals();
@@ -103,6 +105,26 @@ public class BoidStats : MonoBehaviour {
 
     }
 
+    public GameObject findClosestZombot()
+    {
+        GameObject closestZombot = null;
+        float dist = float.MaxValue;
+        foreach (var zombot in RobotZombieBehaviour.Instance.robotZombies)
+        {
+            BoidStats zombotBS = zombot.GetComponent<BoidStats>();
+            if (zombotBS != this)
+            {
+                float currDist = Vector3.Distance(transform.position, zombot.transform.position);
+                if (currDist < dist)
+                {
+                    dist = currDist;
+                    closestZombot = zombot;
+                }
+            }
+        }
+        return closestZombot;
+    }
+
     public static GameObject breed(BoidStats boid1, BoidStats boid2, GameObject boidPrefab)
     {
         Vector3 spawnLoc = (boid1.transform.position + boid2.transform.position) / 2;
@@ -110,21 +132,28 @@ public class BoidStats : MonoBehaviour {
         GameObject newBorn = Instantiate(boidPrefab, spawnLoc, Quaternion.identity);
 
         var nbStats = newBorn.GetComponent<BoidStats>();
-		nbStats.size = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.size + boid2.size) / 2) /*+ Random.Range(-0.1f, 0.1f)*/));
-		nbStats.wealth = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.wealth + boid2.wealth) / 2) /* Random.Range(-0.1f, 0.1f)*/));
-		nbStats.heatlh = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.heatlh + boid2.heatlh) / 2) /*+ Random.Range(-0.1f, 0.1f)*/));
-		nbStats.color.r = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.r + boid2.color.r) / 2) /*+ Random.Range(-0.01f, 0.01f)*/));
-		nbStats.color.g = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.g + boid2.color.g) / 2) /*+ Random.Range(-0.01f, 0.01f)*/));
-		nbStats.color.b = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.b + boid2.color.b) / 2) /*+ Random.Range(-0.01f, 0.01f)*/));
-        //nbStats.StartCoroutine(nbStats.babyTime(nbStats, nbStats.size));
+		nbStats.size = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.size + boid2.size) / 2) + Random.Range(-0.1f, 0.1f)));
+		nbStats.wealth = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.wealth + boid2.wealth) / 2) + Random.Range(-0.1f, 0.1f)));
+		nbStats.heatlh = Mathf.Max(0.0f, Mathf.Min(10.0f, ((boid1.heatlh + boid2.heatlh) / 2) + Random.Range(-0.1f, 0.1f)));
+		nbStats.color.r = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.r + boid2.color.r) / 2) + Random.Range(-0.01f, 0.01f)));
+		nbStats.color.g = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.g + boid2.color.g) / 2) + Random.Range(-0.01f, 0.01f)));
+		nbStats.color.b = Mathf.Max(0.0f, Mathf.Min(1.0f, ((boid1.color.b + boid2.color.b) / 2) + Random.Range(-0.01f, 0.01f)));
+        nbStats.StartCoroutine(nbStats.babyTime(nbStats, nbStats.size));
+        nbStats.removeHat();
+        nbStats.ApplyStatsVisuals();
+        nbStats.hatSelect();
         return newBorn;
     }
 
     IEnumerator babyTime(BoidStats newBorn, float size)
     {
-        newBorn.size /= 2;
-        newBorn.ApplyStatsVisuals();
-        yield return new WaitForSeconds(3.0f);
+        Timer timer = new Timer(1.0f);
+        while (!timer.Trigger())
+        {
+            newBorn.size =  size / Utils.Map(timer.timeLeft, 0.0f, 1.0f, 1.0f, 5.0f);
+            newBorn.ApplyStatsVisuals();
+            yield return new WaitForSeconds(0.1f);
+        }
         newBorn.size = size;
         newBorn.ApplyStatsVisuals();
         yield return null;

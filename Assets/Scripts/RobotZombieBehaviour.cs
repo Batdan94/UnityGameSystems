@@ -71,51 +71,58 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 	// Update is called once per frame
 	void Update ()
     {
-        Vector3 v1 = Vector3.zero;
-        Vector3 v2 = Vector3.zero;
-        Vector3 v3 = Vector3.zero;
-		Vector3 v4 = Vector3.zero;
-        Vector3 v5 = Vector3.zero; 
-        //Get typelist
-        for (int i = 0; i < robotZombies.Count; ++i)
+        if (!GameManager.Instance.breeding)
         {
-            if (robotZombies[i].GetComponent<BoidStats>().squished)
+            Vector3 v1 = Vector3.zero;
+            Vector3 v2 = Vector3.zero;
+            Vector3 v3 = Vector3.zero;
+            Vector3 v4 = Vector3.zero;
+            Vector3 v5 = Vector3.zero;
+            //Get typelist
+            for (int i = 0; i < robotZombies.Count; ++i)
             {
-                continue;
+                if (!robotZombies[i].active)
+                {
+                    continue;
+                }
+                if (robotZombies[i].GetComponent<BoidStats>().squished)
+                {
+                    continue;
+                }
+                Rigidbody rb = robotZombies[i].GetComponent<Rigidbody>();
+                v1 = Separation(i);
+                v2 = Alignment(i);
+                v3 = Cohesion(i);
+                v4 = Threat(i);
+                if (hasAttacked == true)
+                    v5 = Flee(i);
+                Vector3 velocity = v1 + v2 + v3 + v4 + v5;
+                velocity.y = 0.0f;
+                if (!(Vector3.Dot(Vector3.up, robotZombies[i].transform.up) <= 0.2f))
+                {
+                    rb.AddForce(velocity * speed * Time.deltaTime);
+                    rb.AddForce(EdgeAvoidance(rb.velocity, i));
+                    //rb.velocity = new Vector3(rb.velocity.x, Mathf.Min(0.0f, rb.velocity.y), rb.velocity.z);
+                    if (rb.velocity.magnitude > maxSpeed)
+                    {
+                        var vel = rb.velocity.normalized * maxSpeed;
+                        vel.y = -0.1f;
+                        rb.velocity = vel;
+                    }
+                    else if (rb.velocity.magnitude < minSpeed)
+                    {
+                        var vel = rb.velocity.normalized * minSpeed;
+                        vel.y = 0.0f;
+                        rb.velocity = vel;
+                    }
+                }
+
+                Vector3 dir = rb.velocity;
+                float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                rb.transform.localRotation = Quaternion.Lerp(rb.transform.localRotation, Quaternion.AngleAxis(angle, Vector3.up), 0.1f);
+                //robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
+
             }
-            Rigidbody rb = robotZombies[i].GetComponent<Rigidbody>();
-            v1 = Separation(i);
-            v2 = Alignment(i);
-            v3 = Cohesion(i);
-			v4 = Threat(i);
-            if (hasAttacked == true)
-            v5 = Flee(i); 
-            Vector3 velocity = v1 + v2 + v3 + v4 + v5;
-			velocity.y = 0.0f;
-			if (!(Vector3.Dot (Vector3.up, robotZombies[i].transform.up) <= 0.2f))
-			{
-				rb.AddForce (velocity * speed * Time.deltaTime);
-	            rb.AddForce(EdgeAvoidance(rb.velocity, i));
-				//rb.velocity = new Vector3(rb.velocity.x, Mathf.Min(0.0f, rb.velocity.y), rb.velocity.z);
-	            if (rb.velocity.magnitude > maxSpeed)
-	            {
-					var vel = rb.velocity.normalized * maxSpeed;
-					vel.y = -0.1f;
-					rb.velocity = vel;
-	            }
-	            else if (rb.velocity.magnitude < minSpeed)
-	            {
-					var vel = rb.velocity.normalized * minSpeed;
-					vel.y = 0.0f;
-					rb.velocity = vel;
-	            }
-			}
-
-			Vector3 dir = rb.velocity;
-			float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-			rb.transform.localRotation = Quaternion.Lerp(rb.transform.localRotation, Quaternion.AngleAxis(angle, Vector3.up), 0.1f);
-            //robotZombies[i].GetComponent<Rigidbody>().velocity.Normalize(); 
-
         }
     }
 
@@ -185,7 +192,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 	Vector3 Threat(int i)
 	{
 		var vec = new Vector3 ();
-		foreach (var tr in GameObject.FindObjectsOfType<ThreatValue>()) {
+		foreach (var tr in GameManager.Instance.threats) {
 
 			if (Vector3.Distance (tr.transform.position, robotZombies [i].transform.position) < tr.threat * 5) {
 				vec += (robotZombies [i].transform.position - tr.transform.position).normalized * tr.threat * threatModifier;
@@ -196,18 +203,19 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 
     Vector3 Flee(int i)
     {
-        Vector3 fleeDirection = Vector3.zero;
-        float distX = Mathf.Abs(robotZombies[i].transform.position.x - (plane.transform.localScale.x * 5));
-        float distZ = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
-        if (fleeForce < 100)
-        fleeForce = fleeForce + 0.001f; 
-        if (distX < 1 || distZ < 1)
-            robotZombies[i].SetActive(false);
-        if (distX > distZ)
-            fleeDirection = new Vector3(0, 0, fleeForce);
-        else
-            fleeDirection = new Vector3(fleeForce, 0, 0);
-        return fleeDirection; 
+
+            Vector3 fleeDirection = Vector3.zero;
+            float distX = Mathf.Abs(robotZombies[i].transform.position.x - (plane.transform.localScale.x * 5));
+            float distZ = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
+            if (fleeForce < 100)
+                fleeForce = fleeForce + 0.001f;
+            if (distX < 1 || distZ < 1)
+                robotZombies[i].SetActive(false);
+            if (distX > distZ)
+                fleeDirection = new Vector3(0, 0, fleeForce);
+            else
+                fleeDirection = new Vector3(fleeForce, 0, 0);
+            return fleeDirection;
     }
 
     Vector3 EdgeAvoidance(Vector3 v, int i)
