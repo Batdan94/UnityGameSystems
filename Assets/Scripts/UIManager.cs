@@ -28,12 +28,11 @@ public class UIManager : MonoBehaviour
 	int numberOfSpawned;
 
     //manager references
-    public RobotZombieBehaviour zombieMngr;
-    private GameManager gameMngr;
-	public BoidStats getNum;
+    private RobotZombieBehaviour zombieMngr;
+	private TemporaryCircleDeath getNum;
 
     //objectives list
-    private Text[] objectivesList;
+    string[] objectivesList;
 
     // Use this for initialization
     void Start()
@@ -46,36 +45,48 @@ public class UIManager : MonoBehaviour
 		sizeSliderGO.maxValue = 100;
 		populationSliderGO.maxValue = 100;
 
+		zombieMngr = RobotZombieBehaviour.Instance;
 		numberOfSpawned = zombieMngr.numZombos;
+        objectivesList = new string[12];
 
-        objectivesList = new Text[12];
+        objectivesList[0] = "Have a 100% wealthy population";
+        objectivesList[1] = "MaHaveke a 100% poor population";
 
-        objectivesList[0].text = "Have a 100% wealthy population";
-        objectivesList[1].text = "MaHaveke a 100% poor population";
+        objectivesList[2] = "Have a 100% large population";
+        objectivesList[3] = "Have a 100% small population";
 
-        objectivesList[2].text = "Have a 100% large population";
-        objectivesList[3].text = "Have a 100% small population";
+        objectivesList[4] = "Have a wealthy zombie population";
+        objectivesList[5] = "Have a wealthy robot population";
 
-        objectivesList[4].text = "Have a wealthy zombie population";
-        objectivesList[5].text = "Have a wealthy robot population";
+        objectivesList[6] = "Have a poor zombie population";
+        objectivesList[7] = "Have a poor robot population";
 
-        objectivesList[6].text = "Have a poor zombie population";
-        objectivesList[7].text = "Have a poor robot population";
+        objectivesList[8] = "Have a large zombie population";
+        objectivesList[9] = "Have a large robot population";
 
-        objectivesList[8].text = "Have a large zombie population";
-        objectivesList[9].text = "Have a large robot population";
-
-        objectivesList[10].text = "Have a small zombie population";
-        objectivesList[11].text = "Have a small robot population";
+        objectivesList[10] = "Have a small zombie population";
+        objectivesList[11] = "Have a small robot population";
+		objectives ();
     }
 
     // Update is called once per frame
     void Update()
     {
-		numberOfSpawned = zombieMngr.numZombos;
+		//numberOfSpawned = (zombieMngr.numZombos - getNum.numSquished);//zombieMngr.numZombos;
+		updateAlive ();
         updateSliders();
         generationCounter();
     }
+
+	void updateAlive()
+	{
+		numberOfSpawned = 0;
+		foreach (var na in zombieMngr.robotZombies) {
+			if (na.GetComponent<BoidStats> ().squished == false) {
+				numberOfSpawned++;
+			}
+		}
+	}
 
     void updateSliders()
     {
@@ -95,7 +106,7 @@ public class UIManager : MonoBehaviour
 			}
         }
 
-		averageWealth = ((numberOfSpawned - getNum.numSquished) / tempWealth);
+		averageWealth = (numberOfSpawned / tempWealth);
 
 		wealthSliderGO.value = (averageWealth * 100);
     }
@@ -111,7 +122,7 @@ public class UIManager : MonoBehaviour
 			}
         }
 
-		averagePopulation = ((numberOfSpawned - getNum.numSquished) / tempPopulation);
+		averagePopulation = (numberOfSpawned / tempPopulation);
 
 		populationSliderGO.value = (averagePopulation * 100); 
     }
@@ -126,14 +137,15 @@ public class UIManager : MonoBehaviour
 				tempSize += rz.GetComponent<BoidStats>().size;
 			}
         }
-		averageSize = ((numberOfSpawned - getNum.numSquished) / tempSize);
+		averageSize = (numberOfSpawned / tempSize);
 
 		sizeSliderGO.value = (averageSize * 100);
     }
 
     void objectives()
     {
-        objectivesText.text = "Objective: " + objectivesList[(int)Random.value];
+        objectivesText.text = "Objective: \n" +
+			"" + objectivesList[Random.Range(0,11)]; 
     }
 
     void generationCounter()

@@ -15,7 +15,6 @@ public class BoidStats : MonoBehaviour {
     public float heatlh;        //desease
     //[Range(0.0f, 10.0f)]
     public Color color;
-	public int numSquished;
 
     public bool hasBred = false; 
 
@@ -94,7 +93,6 @@ public class BoidStats : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-		numSquished = 0;
         generateStats();
         ApplyStatsVisuals();
         hatSelect();
@@ -168,7 +166,6 @@ public class BoidStats : MonoBehaviour {
         obj.transform.localRotation = Quaternion.identity;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         squished = true;
-		numSquished++;
 
         yield return new WaitForSeconds(3.0f);
         //obj.SetActive(false);

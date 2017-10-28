@@ -9,8 +9,8 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     public RobotZombieBehaviour BoidsManager;
 	public UIManager UImngr;
-    public int roundNumber = 0;
-
+    public int roundNumber;
+	public int numSquished;
     public bool breeding;
     public bool foundMatches = false;
     public float loveDistance;
@@ -25,6 +25,8 @@ public class GameManager : Singleton<GameManager> {
 	// Use this for initialization
 	void Start () {
        //roundTimer = new Timer(timePerRound);
+		roundNumber = 0;
+		numSquished = 0;
     }
 	
 	// Update is called once per frame
@@ -40,6 +42,7 @@ public class GameManager : Singleton<GameManager> {
                 if (ro.GetComponent<BoidStats>().squished)
                 {
                     DestroyImmediate(ro);
+					numSquished++;
                 }
             }
             BoidsManager.robotZombies.RemoveAll(zombo => zombo == null);
