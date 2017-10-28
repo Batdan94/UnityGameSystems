@@ -27,6 +27,11 @@ public class BoidStats : MonoBehaviour {
     public GameObject lovedOne;
     public GameObject breedingParticles;
 
+    public Material fryMat1;
+    public Material fryMat2;
+
+    public GameObject charParticles;
+
     public bool squished = false;
 
     void OnMouseOver()
@@ -169,6 +174,57 @@ public class BoidStats : MonoBehaviour {
 
         yield return new WaitForSeconds(3.0f);
         //obj.SetActive(false);
+        yield return null;
+    }
+
+    public IEnumerator fry(GameObject obj)
+    {
+        Material[] originalMats = obj.GetComponent<MeshRenderer>().materials;
+        Material[] fryMats1 = new Material[originalMats.Length];
+        Material[] fryMats2 = new Material[originalMats.Length];
+        for (int i = 0; i < fryMats1.Length; i++)
+        {
+            fryMats1[i] = new Material(fryMat1);
+        }
+        for (int i = 0; i < fryMats2.Length; i++)
+        {
+            fryMats2[i] = new Material(fryMat2);
+        }
+        obj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        Timer time = new Timer(1.3f);
+        while (!time.Trigger())
+        {
+            if (obj == null)
+                yield return null;
+            obj.transform.position += new Vector3((Random.value - 0.5f) / 5, 0.0f, (Random.value - 0.5f) / 5);
+            int val = Random.Range(0, 3);
+            if (val == 0)
+            {
+                obj.GetComponent<MeshRenderer>().materials = fryMats1;
+            }
+            else if (val == 1)
+            {
+                obj.GetComponent<MeshRenderer>().materials = fryMats2;
+            }
+            else
+            {
+                //obj.GetComponent<MeshRenderer>().materials = originalMats;
+            }
+            yield return new WaitForSeconds(0.01f);
+        }
+        if (obj == null)
+            yield return null;
+        obj.GetComponent<MeshRenderer>().materials = fryMats1;
+
+        obj.GetComponent<MeshRenderer>().enabled = false;
+        foreach(var rend in obj.GetComponentsInChildren<MeshRenderer>())
+        {
+            rend.enabled = false;
+        }
+        obj.GetComponent<Collider>().enabled = false;
+        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
+        
         yield return null;
     }
 }
