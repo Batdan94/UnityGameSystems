@@ -47,8 +47,8 @@ public class UIManager : MonoBehaviour
 		numberOfSpawned = zombieMngr.numZombos;
         objectivesList = new string[12];
 
-        objectivesList[0] = "Have a 100% wealthy population";
-        objectivesList[1] = "MaHaveke a 100% poor population";
+        objectivesList[0] = "Have a 100% Zombie population";
+        objectivesList[1] = "Have a 100% Robot population";
 
         objectivesList[2] = "Have a 100% large population";
         objectivesList[3] = "Have a 100% small population";
