@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     //gameobjects references
-    public GameObject playerFist;
-
     public GameObject fist;
     public GameObject lightningFist;
     public GameObject fireFist;
@@ -153,23 +151,23 @@ public class UIManager : MonoBehaviour
         roundText.GetComponent<Text>().text = "Gen Num: " + GameManager.Instance.roundNumber;
     }
 
-    void punchPower()
+   public void punchPower()
     {
-        playerFist = fist;
+		FindObjectOfType<TemporaryCircleDeath>().fist = fist;
     }
 
-    void LightningPower()
+	public void LightningPower()
     {
-        playerFist = lightningFist;
+		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
     }
 
-    void fireBallPower()
+	public void firePower()
     {
-        playerFist = fireFist;
+		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
     }
 
-    void bioHazardPower()
+	public void plaguePower()
     {
-        playerFist = plagueFist;
+		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
     }
 }
