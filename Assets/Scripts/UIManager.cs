@@ -142,7 +142,7 @@ public class UIManager : MonoBehaviour
 
     void objectives()
     {
-        objectivesText.text = "Objective: \n" +
+        objectivesText.text = "Objective: \n\n" +
 			"" + objectivesList[Random.Range(0,11)]; 
     }
 
