@@ -116,7 +116,7 @@ public class BoidStats : MonoBehaviour {
         foreach (var zombot in RobotZombieBehaviour.Instance.robotZombies)
         {
             BoidStats zombotBS = zombot.GetComponent<BoidStats>();
-            if (zombotBS != this)
+            if (zombotBS != this && zombotBS.lovedOne == null)
             {
                 float currDist = Vector3.Distance(transform.position, zombot.transform.position);
                 if (currDist < dist)
@@ -195,7 +195,10 @@ public class BoidStats : MonoBehaviour {
         while (!time.Trigger())
         {
             if (obj == null)
+            {
                 yield return null;
+                break;
+            }
             obj.transform.position += new Vector3((Random.value - 0.5f) / 5, 0.0f, (Random.value - 0.5f) / 5);
             int val = Random.Range(0, 3);
             if (val == 0)
@@ -210,10 +213,22 @@ public class BoidStats : MonoBehaviour {
             {
                 //obj.GetComponent<MeshRenderer>().materials = originalMats;
             }
+            if (obj == null)
+            {
+                yield return null;
+                break;
+            }
             yield return new WaitForSeconds(0.01f);
+            if (obj == null)
+            {
+                yield return null;
+                break;
+            }
         }
         if (obj == null)
+        {
             yield return null;
+        }
         obj.GetComponent<MeshRenderer>().materials = fryMats1;
 
         obj.GetComponent<MeshRenderer>().enabled = false;

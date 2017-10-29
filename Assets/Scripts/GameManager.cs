@@ -60,7 +60,15 @@ public class GameManager : Singleton<GameManager> {
 
             //Breeding
             breeding = true;
+            foreach(var obj in GameObject.FindGameObjectsWithTag("Attack"))
+            {
+                Destroy(obj);
+            }
 
+            foreach (var obj in FindObjectsOfType<ThreatValue>())
+            {
+                Destroy(obj.gameObject);
+            }
             //calculate distance from goal if there is one
 
         }
@@ -69,15 +77,17 @@ public class GameManager : Singleton<GameManager> {
             barriers.SetActive(true);
             if (!foundMatches)
             {
-
                 foreach (var zombo in BoidsManager.robotZombies)
                 {
                     BoidStats ZomboBS = zombo.GetComponent<BoidStats>();
                     if (ZomboBS.lovedOne == null)
                     {
                         GameObject closest = ZomboBS.findClosestZombot();
-                        ZomboBS.lovedOne = closest;
-                        closest.GetComponent<BoidStats>().lovedOne = zombo;
+                        if (closest != null)
+                        {
+                            ZomboBS.lovedOne = closest;
+                            closest.GetComponent<BoidStats>().lovedOne = zombo;
+                        }
                     }
                 }
 
