@@ -21,7 +21,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
         //var select = GameObject.FindWithTag("select").transform;
         var layerMask = (1 << 9);
         //layerMask = ~layerMask;
-        if (Physics.Raycast(ray, out hit, 100.0f, layerMask))
+        if (Physics.Raycast(ray, out hit, 1000.0f, layerMask))
         {
             Circle.SetActive(true);
             circleOnPoint(hit.point);
