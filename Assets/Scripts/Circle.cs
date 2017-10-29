@@ -22,7 +22,7 @@ public class Circle : MonoBehaviour
         //if (Input.get)
     }
 
-    void CreatePoints()
+    public void CreatePoints()
     {
         float x;
         float y = 0.0f;
