@@ -25,16 +25,17 @@ public class TemporaryCircleDeath : MonoBehaviour {
         {
             Circle.SetActive(true);
             circleOnPoint(hit.point);
+			if (Input.GetMouseButtonDown(0))
+			{
+				RobotZombieBehaviour.Instance.SetHasAttacked(true);
+				attack();
+			}
         }
         else
         {
             Circle.SetActive(false);
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-            RobotZombieBehaviour.Instance.SetHasAttacked(true);
-            attack();
-        }
+        
     }
 
     void circleOnPoint(Vector3 point)

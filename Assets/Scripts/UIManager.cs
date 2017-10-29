@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
 	float averagePopulation;
 	int numberOfSpawned;
 
+	public Circle circle;
+
     //manager references
     private RobotZombieBehaviour zombieMngr;
 	private TemporaryCircleDeath getNum;
@@ -153,11 +155,17 @@ public class UIManager : MonoBehaviour
 
    public void punchPower()
     {
+		circle.xradius = 3.0f;
+		circle.zradius = 3.0f;
+		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = fist;
     }
 
 	public void LightningPower()
     {
+		circle.xradius = 1.0f;
+		circle.zradius = 1.0f;
+		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
     }
 
