@@ -41,9 +41,9 @@ public class UIManager : MonoBehaviour
 		sizeSliderGO.minValue = 0;
 		populationSliderGO.minValue = 0;
 
-		wealthSliderGO.maxValue = 100;
-		sizeSliderGO.maxValue = 100;
-		populationSliderGO.maxValue = 100;
+		wealthSliderGO.maxValue = 10;
+		sizeSliderGO.maxValue = 10;
+		populationSliderGO.maxValue = 10;
 
 		zombieMngr = RobotZombieBehaviour.Instance;
 		numberOfSpawned = zombieMngr.numZombos;
@@ -98,48 +98,55 @@ public class UIManager : MonoBehaviour
      void wealthSlider()
     {
         float tempWealth = 0;
+        int count = 0;
 
         foreach (var rz in zombieMngr.robotZombies)
         {
 			if (rz.GetComponent<BoidStats> ().squished == false) {
 				tempWealth += rz.GetComponent<BoidStats>().wealth;
-			}
+                count++;
+
+            }
         }
 
-		averageWealth = (numberOfSpawned / tempWealth);
+		averageWealth = (tempWealth / count);
 
-		wealthSliderGO.value = (averageWealth * 100);
+        wealthSliderGO.value = (averageWealth);
     }
 
     void populationSlider()
     {
         float tempPopulation = 0;
-
+        int count = 0;
         foreach (var rz in zombieMngr.robotZombies)
         {
 			if (rz.GetComponent<BoidStats> ().squished == false) {
 				tempPopulation += rz.GetComponent<BoidStats>().heatlh;
-			}
+                count++;
+            }
         }
 
-		averagePopulation = (numberOfSpawned / tempPopulation);
+		averagePopulation = (tempPopulation / count);
 
-		populationSliderGO.value = (averagePopulation * 100); 
+        populationSliderGO.value = (averagePopulation); 
     }
 
     void sizeSlider()
     {
         float tempSize = 0;
+        int count = 0;
 
         foreach (var rz in zombieMngr.robotZombies)
         {
 			if (rz.GetComponent<BoidStats> ().squished == false) {
 				tempSize += rz.GetComponent<BoidStats>().size;
+                count++;
+
 			}
         }
-		averageSize = (numberOfSpawned / tempSize);
+        averageSize = (tempSize / count);
 
-		sizeSliderGO.value = (averageSize * 100);
+		sizeSliderGO.value = (averageSize);
     }
 
     void objectives()
