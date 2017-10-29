@@ -17,6 +17,9 @@ public class GameManager : Singleton<GameManager> {
 
     public GameObject barriers;
 
+    float mxBreedTime = 4.0f;
+    Timer breedTimer;
+
     public List<ThreatValue> threats;
     //Timer roundTimer;
     [SerializeField]
@@ -69,11 +72,25 @@ public class GameManager : Singleton<GameManager> {
             {
                 Destroy(obj.gameObject);
             }
+            breedTimer = new Timer(mxBreedTime);
             //calculate distance from goal if there is one
 
         }
         if (breeding)
         {
+            if (breedTimer.Trigger())
+            {
+                foreach (var zombot in BoidsManager.robotZombies)
+                {
+                    zombot.GetComponent<NavMeshAgent>().enabled = false;
+                }
+                roundNumber++;
+                breeding = false;
+                foundMatches = false;
+                barriers.SetActive(false);
+                FindObjectOfType<TemporaryCircleDeath>().enabled = true;
+                return;
+            }
             barriers.SetActive(true);
             if (!foundMatches)
             {

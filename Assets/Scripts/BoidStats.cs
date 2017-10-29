@@ -26,6 +26,7 @@ public class BoidStats : MonoBehaviour {
 
     public GameObject lovedOne;
     public GameObject breedingParticles;
+    public GameObject fireParts;
 
     public Material fryMat1;
     public Material fryMat2;
@@ -238,8 +239,36 @@ public class BoidStats : MonoBehaviour {
         }
         obj.GetComponent<Collider>().enabled = false;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
-        
+        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
+        part.transform.localScale = transform.localScale;
+        yield return null;
+    }
+
+    public IEnumerator OnFire(GameObject obj)
+    {
+        squished = true;
+        var fireInstance = Instantiate(fireParts, obj.transform);
+        fireInstance.transform.localScale = obj.transform.localScale;
+
+        Timer timer = new Timer(3.0f);
+        while (!timer.Trigger())
+        {
+            GetComponent<Rigidbody>().velocity = new Vector3((Random.value - .5f )*20, 0.0f, (Random.value - .5f)* 20);
+            yield return new WaitForSeconds(.5f);
+        }
+
+
+        Destroy(fireInstance);
+
+        obj.GetComponent<MeshRenderer>().enabled = false;
+        foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
+        {
+            rend.enabled = false;
+        }
+        obj.GetComponent<Collider>().enabled = false;
+        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
+        part.transform.localScale = transform.localScale;
         yield return null;
     }
 }
