@@ -4,13 +4,41 @@ using UnityEngine;
 
 public class FireController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    [SerializeField]
+    float fireSpawnTime;
+    [SerializeField]
+    float fireLifeTime;
+    [SerializeField]
+    float minDistForFire;
+    public GameObject circle;
+    Timer spawningTimer;
+    Timer lifeTimer;
+
+    Vector3 lastFire;
+
+    public GameObject firePrefab;
+
+    // Use this for initialization
+    void Start () {
+        spawningTimer = new Timer(fireSpawnTime);
+        lifeTimer = new Timer(fireLifeTime);
+        Instantiate(firePrefab, circle.transform.position, Quaternion.identity, this.transform);
+        lastFire = circle.transform.position;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if ((spawningTimer.timeLeft > 0.0f))
+        {
+            if (Vector3.Distance(lastFire, circle.transform.position) > minDistForFire)
+            {
+                Instantiate(firePrefab, circle.transform.position, Quaternion.identity, this.transform);
+                lastFire = circle.transform.position;
+            }
+        }
+        if (lifeTimer.Trigger())
+        {
+            Destroy(gameObject);
+        }
 	}
 }
