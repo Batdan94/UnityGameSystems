@@ -55,6 +55,12 @@ public class TemporaryCircleDeath : MonoBehaviour {
         {
             fistInstance.GetComponent<LightningController>().circle = Circle;
         }
+
+		if (fistInstance.GetComponent<FireSpawner>() != null)
+		{
+			//fistInstance.GetComponent<FireSpawner>() = Circle;
+			Debug.Log ("Im here");
+		}
         Instantiate (threat, new Vector3 (Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
         
     }
