@@ -5,26 +5,30 @@ using UnityEngine;
 public class FistController : MonoBehaviour
 {
     public GameObject circle;
+    public bool game = true;
     // Use this for initialization
     void Start()
     {
         StartCoroutine(raisingFist(gameObject));
-        foreach (var boid in GameManager.Instance.BoidsManager.robotZombies)
+        if (game)
         {
-            if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) < circle.GetComponent<Circle>().xradius)
+            foreach (var boid in GameManager.Instance.BoidsManager.robotZombies)
             {
-                if (boid.active)
+                if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) < circle.GetComponent<Circle>().xradius)
                 {
-                    boid.GetComponent<BoidStats>().StartCoroutine(boid.GetComponent<BoidStats>().squash(boid));
+                    if (boid.active)
+                    {
+                        boid.GetComponent<BoidStats>().StartCoroutine(boid.GetComponent<BoidStats>().squash(boid));
+                    }
+                    //boid.gameObject.SetActive(false);
                 }
-                //boid.gameObject.SetActive(false);
-            }
-            else if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) > circle.GetComponent<Circle>().xradius &&
-                    Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) < (circle.GetComponent<Circle>().xradius * 2))
-            {
-                //Debug.Log("Is within Blast radius");
-                boid.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, circle.transform.position, circle.GetComponent<Circle>().xradius * 2);
-                boid.GetComponent<Rigidbody>().AddForce(new Vector3(0, 3000, 0));
+                else if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) > circle.GetComponent<Circle>().xradius &&
+                        Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) < (circle.GetComponent<Circle>().xradius * 2))
+                {
+                    //Debug.Log("Is within Blast radius");
+                    boid.GetComponent<Rigidbody>().AddExplosionForce(1000.0f, circle.transform.position, circle.GetComponent<Circle>().xradius * 2);
+                    boid.GetComponent<Rigidbody>().AddForce(new Vector3(0, 3000, 0));
+                }
             }
         }
     }

@@ -178,11 +178,17 @@ public class UIManager : MonoBehaviour
 
 	public void firePower()
     {
-		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
+        circle.xradius = 1.0f;
+        circle.zradius = 1.0f;
+        circle.CreatePoints();
+        FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
     }
 
 	public void plaguePower()
     {
-		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
+        circle.xradius = 1.0f;
+        circle.zradius = 1.0f;
+        circle.CreatePoints();
+        FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
     }
 }
