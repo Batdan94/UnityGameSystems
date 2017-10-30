@@ -48,7 +48,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
         Circle.transform.position = point + new Vector3(0.0f, 0.1f, 0.0f);
     }
 
-    void attack()
+    public void attack()
     {
         var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
         if (fistInstance.GetComponent<FistController>() != null)
@@ -67,5 +67,30 @@ public class TemporaryCircleDeath : MonoBehaviour {
         }
         Instantiate (threat, new Vector3 (Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
         
+    }
+
+    public void attackExp()
+    {
+        var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity, Circle.transform);
+        if (fistInstance.GetComponent<FistController>() != null)
+        {
+            fistInstance.GetComponent<FistController>().circle = Circle;
+            fistInstance.GetComponent<FistController>().game = false;
+        }
+
+        if (fistInstance.GetComponent<LightningController>() != null)
+        {
+            fistInstance.GetComponent<LightningController>().game = false;
+            fistInstance.GetComponent<LightningController>().circle = Circle;
+            fistInstance.GetComponent<LightningController>().game = false;
+
+        }
+
+        if (fistInstance.GetComponent<FireController>() != null)
+        {
+            fistInstance.GetComponent<FireController>().circle = Circle;
+        }
+        //Instantiate(threat, new Vector3(Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
+
     }
 }

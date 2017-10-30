@@ -8,7 +8,8 @@ public class ThreatValue : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        GameManager.Instance.threats.Add(this);
+        if (Application.loadedLevel == 2)
+            GameManager.Instance.threats.Add(this);
 	}
 	
 	// Update is called once per frame

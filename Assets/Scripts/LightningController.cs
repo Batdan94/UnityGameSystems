@@ -13,6 +13,8 @@ public class LightningController : MonoBehaviour {
 
     Timer timer;
     LightningSpawner lightning;
+
+    public bool game =  true;
     // Use this for initialization
     void Start () {
         lightning = Instantiate(spawner, transform, false).GetComponent<LightningSpawner>();
@@ -38,26 +40,29 @@ public class LightningController : MonoBehaviour {
     void createLightningFromPoint(Vector3 point, float maxDist, GameObject followStart = null)
     {
         lightningSource.PlayOneShot(lightningSound, 0.1f);
-        foreach(var boid in RobotZombieBehaviour.Instance.robotZombies)
+        if (game)
         {
-            if (!boid.GetComponent<BoidStats>().squished && boid.active)
+            foreach (var boid in RobotZombieBehaviour.Instance.robotZombies)
             {
-                if ((boid.transform.position - point).sqrMagnitude < maxDist)
+                if (!boid.GetComponent<BoidStats>().squished && boid.active)
                 {
-                    var light = Instantiate(spawner, transform, false).GetComponent<LightningSpawner>();
-                    light.transform.position = point;
-                    light.radius = 0.2f;
-                    light.segments = (int)((boid.transform.position - point).sqrMagnitude);
-                    //light.GetComponent<LineRenderer>().widthMultiplier = 0.3f;
-                    //lightning.transform.position += new Vector3(0.0f, 30.0f, 0.0f);
-                    light.Follow = boid;
-                    if (followStart != null)
+                    if ((boid.transform.position - point).sqrMagnitude < maxDist)
                     {
-                        light.FollowStart = followStart;
+                        var light = Instantiate(spawner, transform, false).GetComponent<LightningSpawner>();
+                        light.transform.position = point;
+                        light.radius = 0.2f;
+                        light.segments = (int)((boid.transform.position - point).sqrMagnitude);
+                        //light.GetComponent<LineRenderer>().widthMultiplier = 0.3f;
+                        //lightning.transform.position += new Vector3(0.0f, 30.0f, 0.0f);
+                        light.Follow = boid;
+                        if (followStart != null)
+                        {
+                            light.FollowStart = followStart;
+                        }
+                        boid.GetComponent<BoidStats>().squished = true;
+                        StartCoroutine(boid.GetComponent<BoidStats>().fry(boid));
+                        createLightningFromPoint(boid.transform.position, maxDist, boid);
                     }
-                    boid.GetComponent<BoidStats>().squished = true;
-                    StartCoroutine(boid.GetComponent<BoidStats>().fry(boid));
-                    createLightningFromPoint(boid.transform.position, maxDist, boid);
                 }
             }
         }
