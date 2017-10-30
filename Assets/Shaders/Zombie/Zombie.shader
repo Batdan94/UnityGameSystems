@@ -8,7 +8,7 @@
 
 		_DispTex("Disp Texture", 2D) = "gray" {}
 		_NormalTex("Normal Texture", 2D) = "bump" {}
-		_Displacement("Displacement", Range (0.0, 1.0)) = 0.3
+		_Displacement("Displacement", Range (0.0, 5.0)) = 0.3
 		_Tiling("Tiling", float) = 1
 	}
 	SubShader {
