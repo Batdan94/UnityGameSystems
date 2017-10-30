@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: eb715516f6852b24fb3bb5549976ea3a
+timeCreated: 1509389671
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: IronCladBoltedRaised
+  fontNames:
+  - IronCladBoltedRaised
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
