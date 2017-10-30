@@ -5,10 +5,16 @@ using UnityEngine;
 public class FistController : MonoBehaviour
 {
     public GameObject circle;
+    public AudioSource fistSource;
+    public AudioClip fistSound;
+
     // Use this for initialization
     void Start()
     {
+        fistSource = GetComponent<AudioSource>();
+
         StartCoroutine(raisingFist(gameObject));
+        fistSource.PlayOneShot(fistSound, 0.1f);
         foreach (var boid in GameManager.Instance.BoidsManager.robotZombies)
         {
             if (Vector3.Distance(new Vector3(boid.transform.position.x, 0.0f, boid.transform.position.z), circle.transform.position) < circle.GetComponent<Circle>().xradius)

@@ -6,6 +6,8 @@ public class LightningController : MonoBehaviour {
 
     public GameObject circle;
     public GameObject spawner;
+    public AudioSource lightningSource;
+    public AudioClip lightningSound;
 
     public float lifetime = 1.5f;
 
@@ -19,6 +21,7 @@ public class LightningController : MonoBehaviour {
         lightning.transform.position += new Vector3(0.0f, 30.0f, 0.0f);
         lightning.midPoint = circle.transform.position;
         lightning.endPoint = circle.transform.position;
+        lightningSource = GetComponent<AudioSource>();
 
         createLightningFromPoint(circle.transform.position, 10.0f);
     }
@@ -34,6 +37,7 @@ public class LightningController : MonoBehaviour {
 
     void createLightningFromPoint(Vector3 point, float maxDist, GameObject followStart = null)
     {
+        lightningSource.PlayOneShot(lightningSound, 0.1f);
         foreach(var boid in RobotZombieBehaviour.Instance.robotZombies)
         {
             if (!boid.GetComponent<BoidStats>().squished && boid.active)
