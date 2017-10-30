@@ -264,6 +264,9 @@ public class UIManager : MonoBehaviour
 
 	public void firePower()
     {
+		circle.xradius = 1.0f;
+		circle.zradius = 1.0f;
+		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
 		StartCoroutine (buttonCooldown (fireButton));
@@ -271,19 +274,13 @@ public class UIManager : MonoBehaviour
 
 	public void plaguePower()
     {
+		circle.xradius = 1.0f;
+		circle.zradius = 1.0f;
+		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
 		StartCoroutine (buttonCooldown (plagueButton));
     }
-
-//	void checkClicked(Button buttonToSelect)
-//	{
-//		if (buttonToSelect != currentSelected)
-//		{
-//			buttonToSelect.Select ();
-//		}
-//		currentSelected = buttonToSelect;
-//	}
 
 	IEnumerator buttonCooldown(Button buttonToCool)
 	{
