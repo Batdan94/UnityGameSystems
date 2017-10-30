@@ -33,6 +33,20 @@ public class UIManager : MonoBehaviour
 
     //objectives list
     string[] objectivesList;
+    enum SocialDifferences
+    {
+        Small, 
+        Big, 
+        Zombie, 
+        Robot, 
+        Rich, 
+        Poor
+    }
+    SocialDifferences socialDifferences; 
+    string[] subject = { "These ", "The  ", "Those ", "Some " } ;
+    string[] predicate = { " should be culled", " should be destroyed", " Need to be crushed", " Need to be eradicated", " Should be more dead" };
+    string[] clause = { ", I'd like that", ", That would please me", ", Then everything would be better", ", Then they'd look more like me!"};
+
 
     // Use this for initialization
     void Start()
@@ -69,6 +83,16 @@ public class UIManager : MonoBehaviour
 		objectives ();
     }
 
+    string GenerateObjective(string socialDifference, int difficulty)
+    {
+        Random rnd = new Random(); 
+        string output = "";
+        output += subject[Random.Range(0, 3)] + socialDifference + " people";
+        output += predicate[Random.Range(0, 4)];
+        output += clause[Random.Range(0, 3)];
+        return output; 
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -76,8 +100,51 @@ public class UIManager : MonoBehaviour
 		updateAlive ();
         updateSliders();
         generationCounter();
+        checkObjective(); 
     }
 
+    void checkObjective()
+    {
+        switch (socialDifferences)
+        {
+            case SocialDifferences.Big:
+                if (averageSize < 2)
+                    NewObjective();
+                break;
+            case SocialDifferences.Small:
+                if (averageSize > 8)
+                    NewObjective();
+                break;
+            case SocialDifferences.Rich:
+                if (averageWealth < 2)
+                    NewObjective();
+                break;
+            case SocialDifferences.Poor:
+                if (averageWealth > 8)
+                    NewObjective();
+                break;
+            case SocialDifferences.Robot:
+                if (averageSize < 2)
+                    NewObjective();
+                break;
+            case SocialDifferences.Zombie:
+                if (averageSize > 8)
+                    NewObjective();
+                break;
+        }
+    }
+    void NewObjective()
+    {
+        
+        int x = (int)socialDifferences; 
+            
+        while (x == (int)socialDifferences)
+            x = Random.Range(0, 5);
+
+        socialDifferences = (SocialDifferences)x;
+        objectives();
+        Debug.Log("New Objective" + socialDifferences.ToString());
+    }
 	void updateAlive()
 	{
 		numberOfSpawned = 0;
@@ -151,8 +218,9 @@ public class UIManager : MonoBehaviour
 
     void objectives()
     {
-        objectivesText.text = "Objective: \n\n" +
-			"" + objectivesList[Random.Range(0,11)]; 
+        objectivesText.text = GenerateObjective(socialDifferences.ToString(), 1); 
+            //= "Objective: \n\n" +
+			//"" + objectivesList[Random.Range(0,11)]; 
     }
 
     void generationCounter()

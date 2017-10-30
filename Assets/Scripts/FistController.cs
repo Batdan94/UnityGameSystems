@@ -6,10 +6,16 @@ public class FistController : MonoBehaviour
 {
     public GameObject circle;
     public bool game = true;
+    public AudioSource fistSource;
+    public AudioClip fistSound;
+
     // Use this for initialization
     void Start()
     {
+        fistSource = GetComponent<AudioSource>();
+
         StartCoroutine(raisingFist(gameObject));
+        fistSource.PlayOneShot(fistSound, 0.1f);
         if (game)
         {
             foreach (var boid in GameManager.Instance.BoidsManager.robotZombies)
