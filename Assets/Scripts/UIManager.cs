@@ -19,8 +19,19 @@ public class UIManager : MonoBehaviour
     public Slider wealthSliderGO;
     public Slider populationSliderGO;
 
-	//temp floats
-	float averageWealth;
+    //button objects
+    public Button fistButton;
+    public Button lightningButton;
+    public Button fireButton;
+    public Button plagueButton;
+
+	private Button currentSelected;
+	private Button tempButton1;
+	private Button tempButton2;
+	private Button tempButton3;
+
+    //temp floats
+    float averageWealth;
 	float averageSize;
 	float averagePopulation;
 	int numberOfSpawned;
@@ -30,6 +41,9 @@ public class UIManager : MonoBehaviour
     //manager references
     private RobotZombieBehaviour zombieMngr;
 	private TemporaryCircleDeath getNum;
+
+    //Timer
+    int cooldownTimer = 7;
 
     //objectives list
     string[] objectivesList;
@@ -100,7 +114,7 @@ public class UIManager : MonoBehaviour
 		updateAlive ();
         updateSliders();
         generationCounter();
-        checkObjective(); 
+        checkObjective();    
     }
 
     void checkObjective()
@@ -233,7 +247,9 @@ public class UIManager : MonoBehaviour
 		circle.xradius = 3.0f;
 		circle.zradius = 3.0f;
 		circle.CreatePoints();
-		FindObjectOfType<TemporaryCircleDeath>().fist = fist;
+		FindObjectOfType<TemporaryCircleDeath> ().fist = fist;
+		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		StartCoroutine (buttonCooldown (fistButton));
     }
 
 	public void LightningPower()
@@ -242,15 +258,84 @@ public class UIManager : MonoBehaviour
 		circle.zradius = 1.0f;
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
+		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		StartCoroutine (buttonCooldown (lightningButton));
     }
 
 	public void firePower()
     {
 		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
+		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		StartCoroutine (buttonCooldown (fireButton));
     }
 
 	public void plaguePower()
     {
 		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
+		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		StartCoroutine (buttonCooldown (plagueButton));
     }
+
+//	void checkClicked(Button buttonToSelect)
+//	{
+//		if (buttonToSelect != currentSelected)
+//		{
+//			buttonToSelect.Select ();
+//		}
+//		currentSelected = buttonToSelect;
+//	}
+
+	IEnumerator buttonCooldown(Button buttonToCool)
+	{
+		if (buttonToCool == fistButton) 
+		{
+			tempButton1 = lightningButton;
+			tempButton2 = fireButton;
+			tempButton3 = plagueButton;
+
+			lightningButton.interactable = false;
+			fireButton.interactable = false;
+			plagueButton.interactable = false;
+		}
+		else if (buttonToCool == lightningButton) 
+		{
+			tempButton1 = fistButton;
+			tempButton2 = fireButton;
+			tempButton3 = plagueButton;
+
+			fistButton.interactable = false;
+			fireButton.interactable = false;
+			plagueButton.interactable = false;
+		}
+		else if (buttonToCool == fireButton) 
+		{
+			tempButton1 = lightningButton;
+			tempButton2 = fistButton;
+			tempButton3 = plagueButton;
+
+			lightningButton.interactable = false;
+			fistButton.interactable = false;
+			plagueButton.interactable = false;
+		}
+		else if (buttonToCool == plagueButton) 
+		{
+			tempButton1 = lightningButton;
+			tempButton2 = fireButton;
+			tempButton3 = fistButton;
+
+			lightningButton.interactable = false;
+			fireButton.interactable = false;
+			fistButton.interactable = false;
+		}
+
+		yield return new WaitForSeconds (5);
+		buttonToCool.interactable = false;
+		tempButton1.interactable = true;
+		tempButton2.interactable = true;
+		tempButton3.interactable = true;
+		FindObjectOfType<TemporaryCircleDeath> ().enabled = false;
+		yield return new WaitForSeconds (cooldownTimer);
+		buttonToCool.interactable = true;
+		//FindObjectOfType<TemporaryCircleDeath> ().fist.SetActive (true);
+	}
 }
