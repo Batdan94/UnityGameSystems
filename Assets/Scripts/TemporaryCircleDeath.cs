@@ -10,30 +10,35 @@ public class TemporaryCircleDeath : MonoBehaviour {
 
 	public GameObject threat;
 
+    public bool game = true;
+
 	// Use this for initialization
 	void Start () {
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //var select = GameObject.FindWithTag("select").transform;
-        var layerMask = (1 << 9);
-        //layerMask = ~layerMask;
-        if (Physics.Raycast(ray, out hit, 1000.0f, layerMask))
+        if (game)
         {
-            Circle.SetActive(true);
-            circleOnPoint(hit.point);
-			if (Input.GetMouseButtonDown(0))
-			{
-				RobotZombieBehaviour.Instance.SetHasAttacked(true);
-				attack();
-			}
-        }
-        else
-        {
-            Circle.SetActive(false);
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //var select = GameObject.FindWithTag("select").transform;
+            var layerMask = (1 << 9);
+            //layerMask = ~layerMask;
+            if (Physics.Raycast(ray, out hit, 1000.0f, layerMask))
+            {
+                Circle.SetActive(true);
+                circleOnPoint(hit.point);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    RobotZombieBehaviour.Instance.SetHasAttacked(true);
+                    attack();
+                }
+            }
+            else
+            {
+                Circle.SetActive(false);
+            }
         }
         
     }
