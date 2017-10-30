@@ -7,6 +7,14 @@ public class BoidStats : MonoBehaviour {
     private bool displayStats = false;
     Vector3 screenPosition;
 
+    Texture2D zomSizeImg;
+    Texture2D zomWealthImg;
+    Texture2D zomHealthImg;
+    Texture2D zomSizeIcon;
+    Gradient healthGradient;
+    GradientColorKey[] gck;
+    GradientAlphaKey[] gak;
+
     [Range(0.0f, 10.0f)]
     public float size;          //fitness
     [Range(0.0f, 10.0f)]
@@ -44,14 +52,32 @@ public class BoidStats : MonoBehaviour {
         displayStats = false;
     }
 
+    void hoverStats()
+    {
+
+    }
+
     void OnGUI()
     {
-        screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-        screenPosition.y = Screen.height - screenPosition.y;
+        
 
-        if (displayStats == true)
+        if (displayStats == true && squished == false)
         {
-            GUI.Box(new Rect(screenPosition.x, screenPosition.y + 25, 110, 50), "Size: " + size + "\nWealth: " + wealth + "\nHealth: " + heatlh);
+            screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            screenPosition.y = Screen.height - screenPosition.y;
+            GUI.skin.label.fontSize = 11;
+            GUI.Box(new Rect(screenPosition.x-8, screenPosition.y+18, 105, 75), " ");
+
+            GUI.Label(new Rect(screenPosition.x-4, screenPosition.y + 15, 50, 20), "Health: ");
+            GUI.color = healthGradient.Evaluate(heatlh / 10);
+            GUI.DrawTexture(new Rect(screenPosition.x-4, screenPosition.y + 30, heatlh * 10, 10), zomHealthImg);
+   
+            GUI.color = Color.white;
+            GUI.Label(new Rect(screenPosition.x-4, screenPosition.y + 37, 50, 20), "Wealth: ");
+            GUI.DrawTexture(new Rect(screenPosition.x-4, screenPosition.y + 52, wealth * 10, 10), zomWealthImg);
+     
+            GUI.DrawTexture(new Rect(screenPosition.x-4, screenPosition.y + 63, 100, 15), zomSizeIcon);
+            GUI.DrawTexture(new Rect(screenPosition.x-4, screenPosition.y + 78, size * 10, 10), zomSizeImg);
         }
     }
 
@@ -63,6 +89,30 @@ public class BoidStats : MonoBehaviour {
 		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));
         color = Random.ColorHSV(0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
         coloredRegion.material.color = color;
+    }
+
+    public void loadZomStats()
+    {
+        healthGradient = new Gradient();
+        gck = new GradientColorKey[2];
+
+        gck[0].color = Color.red;
+        gck[0].time = 0.0F;
+        gck[1].color = Color.green;
+        gck[1].time = 1.0F;
+
+        gak = new GradientAlphaKey[2];
+        gak[0].alpha = 1.0F;
+        gak[0].time = 0.0F;
+        gak[1].alpha = 1.0F;
+        gak[1].time = 1.0F;
+        healthGradient.SetKeys(gck, gak);
+
+        zomSizeIcon = Resources.Load("size icon") as Texture2D;
+        zomSizeImg = Resources.Load("size background") as Texture2D;
+        zomHealthImg = Resources.Load("zombieHealthSprite") as Texture2D;
+        zomWealthImg = Resources.Load("money background") as Texture2D;
+
     }
 
     public void ApplyStatsVisuals()
@@ -102,6 +152,7 @@ public class BoidStats : MonoBehaviour {
         generateStats();
         ApplyStatsVisuals();
         hatSelect();
+        loadZomStats();
 
     }
 
