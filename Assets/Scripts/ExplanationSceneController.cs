@@ -10,6 +10,9 @@ public class ExplanationSceneController : MonoBehaviour {
     public GameObject fireFist;
     public GameObject plagueFist;
 
+    public AudioSource explainSource;
+    public AudioClip explainClip;
+
     public BoidStats boid;
 
     //slider objects
@@ -37,6 +40,8 @@ public class ExplanationSceneController : MonoBehaviour {
     void Start () {
         timer = new Timer(2.0f);
         NextAttack();
+        explainSource = GetComponent<AudioSource>();
+        explainSource.PlayOneShot(explainClip, 0.1f);
     }
 	
 	// Update is called once per frame
