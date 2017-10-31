@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
 		zombieMngr = RobotZombieBehaviour.Instance;
 		numberOfSpawned = zombieMngr.numZombos;
 
-		cooldownTimer = 5;
+		cooldownTimer = 1;
 
 		objectives ();
     }

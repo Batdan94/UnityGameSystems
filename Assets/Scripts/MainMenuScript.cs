@@ -7,7 +7,7 @@ public class MainMenuScript : MonoBehaviour {
 
     public void loadLevel(int sceneNumber)
     {
-		SceneManager.Loadscene(sceneNumber);
+		Application.LoadLevel(sceneNumber);
     }
 
     public void ExitButton()
