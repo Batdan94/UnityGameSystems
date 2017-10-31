@@ -120,6 +120,10 @@ public class TemporaryCircleDeath : MonoBehaviour {
         {
             fistInstance.GetComponent<FireController>().circle = Circle;
         }
+        if (fistInstance.GetComponent<PlagueController>() != null)
+        {
+            fistInstance.GetComponent<PlagueController>().circle = Circle;
+        }
         //Instantiate(threat, new Vector3(Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
 
     }
