@@ -2,7 +2,6 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 
-
 		_Tess ("Tessellation", Range(1,32)) = 4
 		_MainTex("Base Texture", 2D) = "white" {}
 
@@ -20,7 +19,7 @@
 		#pragma surface surf Standard fullforwardshadows vertex:disp tessellate:tessFixed 
 
 		// Use shader model 3.0 target, to get nicer looking lighting
-		#pragma target 3.0
+		#pragma target 4.6
 
 		struct appdata {
 			float4 vertex : POSITION;
@@ -41,10 +40,12 @@
 		sampler2D _DispTex;
 		float _Displacement;
 		float _Tiling;
-
+		sampler2D _NormalMap;
+		//fixed4 _Color;
 
 		void disp (inout appdata v)
 		{
+			UNITY_SETUP_INSTANCE_ID(v);
 			float d = tex2Dlod(_DispTex, float4(v.texcoord.xy*_Tiling, 0, 0)).r * _Displacement;
 			v.vertex.xyz += v.normal * d;
 		}
@@ -53,21 +54,13 @@
 			float2 uv_MainTex;
 		};
 
-
-
-
-
-
-		sampler2D _NormalMap;
-		fixed4 _Color;
-
 		UNITY_INSTANCING_CBUFFER_START(Props)
-			// put more per-instance properties here
+			UNITY_DEFINE_INSTANCED_PROP(fixed4, _Color)
 		UNITY_INSTANCING_CBUFFER_END
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			// Albedo comes from a texture tinted by color
-			half4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * UNITY_ACCESS_INSTANCED_PROP(_Color);
 			o.Albedo = c.rgb;
 			// Metallic and smoothness come from slider variables
 			o.Normal = UnpackNormal(tex2D(_NormalMap, IN.uv_MainTex));
