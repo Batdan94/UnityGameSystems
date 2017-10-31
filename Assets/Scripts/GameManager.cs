@@ -14,7 +14,7 @@ public class GameManager : Singleton<GameManager> {
     public bool breeding;
     public bool foundMatches = false;
     public float loveDistance;
-
+    public int minimumZombies; 
     public GameObject barriers;
 
     float mxBreedTime = 4.0f;
@@ -52,14 +52,18 @@ public class GameManager : Singleton<GameManager> {
 
 			//Reset standard values
             BoidsManager.SetHasAttacked(false);
+            int checkEnoughZombos = 0; 
             foreach (var zombo in BoidsManager.robotZombies)
                 if (zombo.active == false)
                 {
                     zombo.SetActive(true);
                     zombo.transform.position = BoidsManager.GetComponent<RobotZombieBehaviour>().getRandomSpawn();
                     zombo.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    zombo.GetComponent<BoidStats>().hasBred = false; 
+                    zombo.GetComponent<BoidStats>().hasBred = false;
+                    checkEnoughZombos++; 
                 }
+            if (checkEnoughZombos < minimumZombies)
+                Application.LoadLevel(3); 
             BoidsManager.GetComponent<RobotZombieBehaviour>().fleeForce = 0; 
             //Breeding
             breeding = true;
