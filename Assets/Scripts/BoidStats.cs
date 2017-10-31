@@ -118,7 +118,7 @@ public class BoidStats : MonoBehaviour {
     {
 		foreach(var coloredRegion in coloredRegions)
 			coloredRegion.material.color = color;
-        float mappedScale = Utils.Map(size, 0.0f, 10.0f, 0.5f, 1.5f);
+        float mappedScale = Utils.Map(size, 0.0f, 10.0f, 1.0f, 3.0f);
         transform.localScale = new Vector3(mappedScale, mappedScale, mappedScale);
         //hatPlace.localPosition = new Vector3(0.0f, .5f, 0.0f);
 		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));

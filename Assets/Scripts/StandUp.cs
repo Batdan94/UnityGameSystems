@@ -24,7 +24,7 @@ public class StandUp : MonoBehaviour {
             //}
             if ((transform.position.y <= transform.localScale.y / 2))
             {
-				rb.AddForce(Vector3.up * 1000 * Utils.Map(GetComponent<BoidStats>().size, 1.0f, 10.0f, 1.0f, 2.0f));
+				rb.AddForce(Vector3.up * 3000 * Utils.Map(GetComponent<BoidStats>().size, 1.0f, 10.0f, 1.0f, 2.0f));
                 jumping = true;
             }
         }
@@ -36,7 +36,7 @@ public class StandUp : MonoBehaviour {
 				Vector3 Euler = transform.localEulerAngles;
 				Euler.x = 0.0f;
 				Euler.z = 0.0f;
-				rb.MoveRotation(Quaternion.Lerp(transform.rotation, Quaternion.Euler(Euler), 0.1f));
+				rb.MoveRotation(Quaternion.Lerp(transform.rotation, Quaternion.Euler(Euler), 0.2f));
             }
         }
         else
