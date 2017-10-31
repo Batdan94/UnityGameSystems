@@ -231,9 +231,13 @@ public class BoidStats : MonoBehaviour {
 
     public IEnumerator fry(GameObject obj)
     {
-        Material[] originalMats = obj.GetComponent<MeshRenderer>().materials;
-        Material[] fryMats1 = new Material[originalMats.Length];
-        Material[] fryMats2 = new Material[originalMats.Length];
+		List<Material> originalMats = new List<Material> ();
+		foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+		{
+			originalMats.AddRange (rend.materials);
+		}
+		Material[] fryMats1 = new Material[1];
+		Material[] fryMats2 = new Material[1];
         for (int i = 0; i < fryMats1.Length; i++)
         {
             fryMats1[i] = new Material(fryMat1);
@@ -255,12 +259,22 @@ public class BoidStats : MonoBehaviour {
             int val = Random.Range(0, 3);
             if (val == 0)
             {
-                obj.GetComponent<MeshRenderer>().materials = fryMats1;
+				foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+				{
+					for (int i = 0; i < obj.GetComponent<MeshRenderer> ().materials.Length; i++) {
+						obj.GetComponent<MeshRenderer> ().materials [i] = fryMats1 [0];
+					}
+				}
             }
             else if (val == 1)
             {
-                obj.GetComponent<MeshRenderer>().materials = fryMats2;
-            }
+				foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+				{
+					for (int i = 0; i < obj.GetComponent<MeshRenderer> ().materials.Length; i++) {
+						obj.GetComponent<MeshRenderer> ().materials [i] = fryMats1 [0];
+					}
+				}
+			}
             else
             {
                 //obj.GetComponent<MeshRenderer>().materials = originalMats;
