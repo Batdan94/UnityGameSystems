@@ -48,6 +48,8 @@ public class BoidStats : MonoBehaviour {
 
     RobotZombieBehaviour temp;
 
+    public bool infected = false;
+
     public bool squished = false;
 
     void OnMouseOver()
@@ -366,37 +368,23 @@ public class BoidStats : MonoBehaviour {
 
     public IEnumerator Infect(GameObject obj)
     {
-        squished = true;
-        var infectInstance = Instantiate(plagueStink, obj.transform);
-        infectInstance.transform.localScale = obj.transform.localScale;
-
-        //Timer timer = new Timer(3.0f);
-        //while (!timer.Trigger())
-        //{
-        //    GetComponent<Rigidbody>().velocity = new Vector3((Random.value - .5f) * 20, 0.0f, (Random.value - .5f) * 20);
-        //    yield return new WaitForSeconds(.5f);
-        //}
-
-        foreach (GameObject rz in temp.robotZombies)
+        if (!infected)
         {
-            
-            if (Vector3.Distance(obj.transform.position, rz.transform.position) <= 1.0f)
-            {
-                rz.GetComponent<BoidStats>().StartCoroutine(rz.GetComponent<BoidStats>().Infect(rz.gameObject));
-            }
-        }
+            infected = true;
+            var infectInstance = Instantiate(plagueStink, obj.transform.position, obj.transform.rotation, obj.transform);
+            infectInstance.transform.localScale = obj.transform.localScale;
 
-        Destroy(infectInstance);
-
-        obj.GetComponent<MeshRenderer>().enabled = false;
-        foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
-        {
-            rend.enabled = false;
+            yield return new WaitForSeconds(infectInstance.GetComponent<PlagueController>().plagueLifeTime);
+            Destroy(infectInstance);
+            squished = true;
+            obj.SetActive(false);
+            obj.GetComponent<Collider>().enabled = false;
+            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
+            obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
+            obj.transform.localRotation = Quaternion.Euler(0.0f, transform.localRotation.y, 0.0f);
+            squished = true;
         }
-        obj.GetComponent<Collider>().enabled = false;
-        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
-        part.transform.localScale = transform.localScale;
         yield return null;
     }
 }

@@ -89,7 +89,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
 			break;
 		case 3:
 			if (!hasPoisoned) {
-				var fistInstance = Instantiate (fist, new Vector3 (Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
+				var fistInstance = Instantiate (fist, new Vector3 (Circle.transform.position.x, 1.0f, Circle.transform.position.z), Quaternion.identity);
 				if (fistInstance.GetComponent<PlagueController> () != null) {
 					fistInstance.GetComponent<PlagueController> ().circle = Circle;
 					StartCoroutine (uIManager.GetComponent<UIManager> ().buttonCooldown (uIManager.GetComponent<UIManager> ().fireButton));
@@ -123,6 +123,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
         if (fistInstance.GetComponent<PlagueController>() != null)
         {
             fistInstance.GetComponent<PlagueController>().circle = Circle;
+            fistInstance.transform.position = new Vector3(Circle.transform.position.x, 1.0f, Circle.transform.position.z);
         }
         //Instantiate(threat, new Vector3(Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
 
