@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
 	private TemporaryCircleDeath getNum;
 
     //Timer
-    int cooldownTimer = 7;
+    int cooldownTimer;
 
     //objectives list
     string[] objectivesList;
@@ -75,6 +75,8 @@ public class UIManager : MonoBehaviour
 
 		zombieMngr = RobotZombieBehaviour.Instance;
 		numberOfSpawned = zombieMngr.numZombos;
+
+		cooldownTimer = 5;
 
 		objectives ();
     }
@@ -227,7 +229,8 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath> ().fist = fist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 0;
-		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//circle.enabled = true;
     }
 
 	public void LightningPower()
@@ -237,7 +240,8 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 1;
-		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//circle.enabled = true;
     }
 
 	public void firePower()
@@ -247,8 +251,8 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 2;
-
-		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//circle.enabled = true;
     }
 
 	public void plaguePower()
@@ -258,8 +262,8 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 3;
-
-		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
+		//circle.enabled = true;
     }
 
 	public IEnumerator buttonCooldown(Button buttonToCool)
@@ -269,7 +273,7 @@ public class UIManager : MonoBehaviour
 		{
             FindObjectOfType<TemporaryCircleDeath>().hasSmashed = true;
         }
-		else if (buttonToCool == lightningButton) 
+		else if (buttonToCool == lightningButton)
 		{
             FindObjectOfType<TemporaryCircleDeath>().hasStruck = true;
         }
@@ -284,7 +288,8 @@ public class UIManager : MonoBehaviour
 		}
 
 		buttonToCool.interactable = false;
-       
+		//FindObjectOfType<TemporaryCircleDeath> ().enabled = false;
+		//circle.enabled = false;
 		yield return new WaitForSeconds (cooldownTimer);
         FindObjectOfType<TemporaryCircleDeath>().hasSmashed = false;
         FindObjectOfType<TemporaryCircleDeath>().hasStruck = false;
