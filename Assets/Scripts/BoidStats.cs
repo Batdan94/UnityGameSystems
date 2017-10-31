@@ -61,7 +61,6 @@ public class BoidStats : MonoBehaviour {
 
     void OnMouseDown()
     {
-        backgroundSound.UnloadAudioData();
         backgroundSource.PlayOneShot(attackSound, 0.7f);
     }
 
