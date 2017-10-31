@@ -27,7 +27,7 @@ public class BoidStats : MonoBehaviour {
     public bool hasBred = false; 
 
     [SerializeField]
-    private MeshRenderer coloredRegion;
+    private List<MeshRenderer> coloredRegions;
     public GameObject boidPrefab;
     public Transform hatPlace;
 	public GameObject hatInst;
@@ -86,7 +86,8 @@ public class BoidStats : MonoBehaviour {
         heatlh = Random.Range(0.0f, 10.0f);
 		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));
         color = Random.ColorHSV(0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-        coloredRegion.material.color = color;
+		foreach(var coloredRegion in coloredRegions)
+        	coloredRegion.material.color = color;
     }
 
     public void loadZomStats()
@@ -115,10 +116,11 @@ public class BoidStats : MonoBehaviour {
 
     public void ApplyStatsVisuals()
     {
-        coloredRegion.material.color = color;
+		foreach(var coloredRegion in coloredRegions)
+			coloredRegion.material.color = color;
         float mappedScale = Utils.Map(size, 0.0f, 10.0f, 0.5f, 1.5f);
         transform.localScale = new Vector3(mappedScale, mappedScale, mappedScale);
-        hatPlace.localPosition = new Vector3(0.0f, .5f, 0.0f);
+        //hatPlace.localPosition = new Vector3(0.0f, .5f, 0.0f);
 		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));
     }
 
@@ -137,7 +139,7 @@ public class BoidStats : MonoBehaviour {
             hatLocation += "TopHat";
 
         GameObject hat = Resources.Load(hatLocation) as GameObject;
-        hatInst = Instantiate(hat, hatPlace.position, hatPlace.rotation, transform);
+		hatInst = Instantiate(hat, hatPlace.position, hatPlace.rotation, hatPlace.transform);
     }
 
 	public void removeHat()
