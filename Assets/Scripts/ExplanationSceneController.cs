@@ -52,6 +52,11 @@ public class ExplanationSceneController : MonoBehaviour {
             NextAttack();
         }
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            Application.LoadLevel(2);
+        }
+
 	}
 
     void updateSliders()

@@ -11,8 +11,8 @@ public class Zombificate : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		bits = new List<MeshRenderer> ();
-		bits.AddRange (transform.GetComponentsInChildren<MeshRenderer> ());
+		//bits = new List<MeshRenderer> ();
+		//bits.AddRange (transform.GetComponentsInChildren<MeshRenderer> ());
 		for ( int j = 0; j < bits.Count; j++)
 		{
 			for (int i = 0; i < bits[j].materials.Length; i++){

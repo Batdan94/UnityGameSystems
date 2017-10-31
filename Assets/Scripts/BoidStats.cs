@@ -234,7 +234,7 @@ public class BoidStats : MonoBehaviour {
         squished = true;
 
         yield return new WaitForSeconds(3.0f);
-        //obj.SetActive(false);
+        obj.SetActive(false);
         yield return null;
     }
 
@@ -316,13 +316,15 @@ public class BoidStats : MonoBehaviour {
         {
             rend.enabled = false;
         }
-		obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
+
+        obj.SetActive(false);
+        obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
 		obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
 		obj.transform.localRotation = Quaternion.Euler (0.0f, transform.localRotation.y, 0.0f);
 		squished = true;
         obj.GetComponent<Collider>().enabled = false;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
+        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity);
         part.transform.localScale = transform.localScale;
         yield return null;
     }
@@ -350,13 +352,14 @@ public class BoidStats : MonoBehaviour {
 				rend.material = fryMat1;
 			}
 		}
+        obj.SetActive(false);
         obj.GetComponent<Collider>().enabled = false;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 		obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
 		obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
 		obj.transform.localRotation = Quaternion.Euler (0.0f, transform.localRotation.y, 0.0f);
 		squished = true;
-        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
+        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity);
         part.transform.localScale = transform.localScale;
         yield return null;
     }
