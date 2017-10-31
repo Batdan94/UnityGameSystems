@@ -247,6 +247,7 @@ public class UIManager : MonoBehaviour
 		circle.zradius = 3.0f;
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath> ().fist = fist;
+		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 0;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
 		//StartCoroutine (buttonCooldown (fistButton));
     }
@@ -257,6 +258,7 @@ public class UIManager : MonoBehaviour
 		circle.zradius = 1.0f;
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
+		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 1;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
 		//StartCoroutine (buttonCooldown (lightningButton));
     }
@@ -267,6 +269,8 @@ public class UIManager : MonoBehaviour
 		circle.zradius = 1.0f;
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
+		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 2;
+
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
 		//StartCoroutine (buttonCooldown (fireButton));
     }
@@ -277,6 +281,8 @@ public class UIManager : MonoBehaviour
 		circle.zradius = 1.0f;
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
+		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 3;
+
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
 		//StartCoroutine (buttonCooldown (plagueButton));
     }
@@ -290,7 +296,7 @@ public class UIManager : MonoBehaviour
 			//tempButton2 = fireButton;
 			//tempButton3 = plagueButton;
             FindObjectOfType<TemporaryCircleDeath>().hasSmashed = true;
-            FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 0; 
+            //FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 0; 
             //lightningButton.interactable = false;
             //fireButton.interactable = false;
             //plagueButton.interactable = false;
@@ -301,7 +307,7 @@ public class UIManager : MonoBehaviour
 			//tempButton2 = fireButton;
 			//tempButton3 = plagueButton;
             FindObjectOfType<TemporaryCircleDeath>().hasStruck = true;
-            FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 1;
+            //FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 1;
             //fistButton.interactable = false;
             //fireButton.interactable = false;
             //plagueButton.interactable = false;
@@ -313,7 +319,7 @@ public class UIManager : MonoBehaviour
 			//tempButton3 = plagueButton;
             yield return new WaitForSeconds (1);
             FindObjectOfType<TemporaryCircleDeath>().hasLit = true;
-            FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 2;
+            //FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 2;
             //lightningButton.interactable = false;
             //fistButton.interactable = false;
             //plagueButton.interactable = false;
@@ -323,6 +329,7 @@ public class UIManager : MonoBehaviour
 			//tempButton1 = lightningButton;
 			//tempButton2 = fireButton;
 			//tempButton3 = fistButton;
+			FindObjectOfType<TemporaryCircleDeath>().hasPoisoned = true;
 
 			//lightningButton.interactable = false;
 			//fireButton.interactable = false;

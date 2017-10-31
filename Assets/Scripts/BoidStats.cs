@@ -59,8 +59,6 @@ public class BoidStats : MonoBehaviour {
 
     void OnGUI()
     {
-        
-
         if (displayStats == true && squished == false)
         {
             screenPosition = Camera.main.WorldToScreenPoint(transform.position);

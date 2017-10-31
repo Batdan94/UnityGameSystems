@@ -36,12 +36,14 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
     public float alignmentDistance;
     [Range(0.0f, 10.0f)]
     public float cohesionDistance;
+	[Range(0.0001f, 1.0f)]
+	public float fleeModifier;
 
     public float minSpeed;
     public float maxSpeed;
     private bool hasAttacked = false;
     private bool hasBred = false; 
-    public GameObject plane; 
+	public GameObject plane;
     public void SetHasAttacked(bool set) { hasAttacked = set; }
     public void SetHasbred(bool set) { hasBred = set; }
     public bool HasBred() { return hasBred; }
@@ -208,7 +210,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
             float distX = Mathf.Abs(robotZombies[i].transform.position.x - (plane.transform.localScale.x * 5));
             float distZ = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
             if (fleeForce < 100)
-                fleeForce = fleeForce + 0.001f;
+                fleeForce = fleeForce + fleeModifier;
             if (distX < 1 || distZ < 1)
                 robotZombies[i].SetActive(false);
             if (distX > distZ)
