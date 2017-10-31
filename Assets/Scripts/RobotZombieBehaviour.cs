@@ -205,7 +205,6 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
 
     Vector3 Flee(int i)
     {
-
             Vector3 fleeDirection = Vector3.zero;
             float distX = Mathf.Abs(robotZombies[i].transform.position.x - (plane.transform.localScale.x * 5));
             float distZ = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
