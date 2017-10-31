@@ -32,7 +32,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
                 if (Input.GetMouseButtonDown(0))
                 {
                     RobotZombieBehaviour.Instance.SetHasAttacked(true);
-                    attack();
+                    attk();
                 }
             }
             else
@@ -48,7 +48,7 @@ public class TemporaryCircleDeath : MonoBehaviour {
         Circle.transform.position = point + new Vector3(0.0f, 0.1f, 0.0f);
     }
 
-    public void attack()
+    public void attk()
     {
         var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
         if (fistInstance.GetComponent<FistController>() != null)

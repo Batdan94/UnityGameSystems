@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ThreatValue : MonoBehaviour {
 
@@ -8,10 +9,10 @@ public class ThreatValue : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        if (Application.loadedLevel == 2)
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene() == UnityEngine.SceneManagement.SceneManager.GetSceneByName("BoidsScene"))
             GameManager.Instance.threats.Add(this);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		threat -= Time.deltaTime;
