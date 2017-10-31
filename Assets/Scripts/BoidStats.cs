@@ -118,7 +118,7 @@ public class BoidStats : MonoBehaviour {
     {
 		foreach(var coloredRegion in coloredRegions)
 			coloredRegion.material.color = color;
-        float mappedScale = Utils.Map(size, 0.0f, 10.0f, 1.0f, 3.0f);
+        float mappedScale = Utils.Map(size, 0.0f, 10.0f, 1.0f, 2.0f);
         transform.localScale = new Vector3(mappedScale, mappedScale, mappedScale);
         //hatPlace.localPosition = new Vector3(0.0f, .5f, 0.0f);
 		//color = new Color (Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f), 0.42f, Utils.Map (heatlh, 0.0f, 10.0f, 0.0f, 0.42f));
@@ -220,7 +220,7 @@ public class BoidStats : MonoBehaviour {
     {
         obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
         obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
-        obj.transform.localRotation = Quaternion.identity;
+		obj.transform.localRotation = Quaternion.Euler(0.0f, transform.localRotation.y, 0.0f);
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         squished = true;
 
@@ -232,7 +232,7 @@ public class BoidStats : MonoBehaviour {
     public IEnumerator fry(GameObject obj)
     {
 		List<Material> originalMats = new List<Material> ();
-		foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+		foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
 		{
 			originalMats.AddRange (rend.materials);
 		}
@@ -259,19 +259,19 @@ public class BoidStats : MonoBehaviour {
             int val = Random.Range(0, 3);
             if (val == 0)
             {
-				foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+				foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
 				{
-					for (int i = 0; i < obj.GetComponent<MeshRenderer> ().materials.Length; i++) {
-						obj.GetComponent<MeshRenderer> ().materials [i] = fryMats1 [0];
+					for (int i = 0; i < rend.materials.Length; i++) {
+						rend.material = fryMats1 [0];
 					}
 				}
             }
             else if (val == 1)
             {
-				foreach (var rend in GetComponentsInChildren<MeshRenderer>())
+				foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
 				{
-					for (int i = 0; i < obj.GetComponent<MeshRenderer> ().materials.Length; i++) {
-						obj.GetComponent<MeshRenderer> ().materials [i] = fryMats1 [0];
+					for (int i = 0; i < rend.materials.Length; i++) {
+						rend.material = fryMats2 [0];
 					}
 				}
 			}
@@ -295,13 +295,22 @@ public class BoidStats : MonoBehaviour {
         {
             yield return null;
         }
-        obj.GetComponent<MeshRenderer>().materials = fryMats1;
+		foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
+		{
+			for (int i = 0; i < rend.materials.Length; i++) {
+				rend.material = fryMats1 [0];
+			}
+		}
 
         obj.GetComponent<MeshRenderer>().enabled = false;
         foreach(var rend in obj.GetComponentsInChildren<MeshRenderer>())
         {
             rend.enabled = false;
         }
+		obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
+		obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
+		obj.transform.localRotation = Quaternion.Euler (0.0f, transform.localRotation.y, 0.0f);
+		squished = true;
         obj.GetComponent<Collider>().enabled = false;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
@@ -326,12 +335,18 @@ public class BoidStats : MonoBehaviour {
         Destroy(fireInstance);
 
         obj.GetComponent<MeshRenderer>().enabled = false;
-        foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
-        {
-            rend.enabled = false;
-        }
+		foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
+		{
+			for (int i = 0; i < rend.materials.Length; i++) {
+				rend.material = fryMat1;
+			}
+		}
         obj.GetComponent<Collider>().enabled = false;
         obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		obj.transform.localScale = new Vector3(obj.transform.localScale.x, 0.01f, obj.transform.localScale.z);
+		obj.transform.position = new Vector3(obj.transform.position.x, 0.01f, obj.transform.position.z);
+		obj.transform.localRotation = Quaternion.Euler (0.0f, transform.localRotation.y, 0.0f);
+		squished = true;
         var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
         part.transform.localScale = transform.localScale;
         yield return null;
