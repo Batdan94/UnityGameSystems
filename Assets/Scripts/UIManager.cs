@@ -149,7 +149,6 @@ public class UIManager : MonoBehaviour
     }
     void NewObjective()
     {
-        
         int x = (int)socialDifferences; 
             
         while (x == (int)socialDifferences)
@@ -249,7 +248,7 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath> ().fist = fist;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		StartCoroutine (buttonCooldown (fistButton));
+		//StartCoroutine (buttonCooldown (fistButton));
     }
 
 	public void LightningPower()
@@ -259,7 +258,7 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		StartCoroutine (buttonCooldown (lightningButton));
+		//StartCoroutine (buttonCooldown (lightningButton));
     }
 
 	public void firePower()
@@ -269,7 +268,7 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		StartCoroutine (buttonCooldown (fireButton));
+		//StartCoroutine (buttonCooldown (fireButton));
     }
 
 	public void plaguePower()
@@ -279,60 +278,68 @@ public class UIManager : MonoBehaviour
 		circle.CreatePoints();
 		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
 		FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		StartCoroutine (buttonCooldown (plagueButton));
+		//StartCoroutine (buttonCooldown (plagueButton));
     }
 
-	IEnumerator buttonCooldown(Button buttonToCool)
+	public IEnumerator buttonCooldown(Button buttonToCool)
 	{
+        Debug.Log("Calling Button Cooldown"); 
 		if (buttonToCool == fistButton) 
 		{
-			tempButton1 = lightningButton;
-			tempButton2 = fireButton;
-			tempButton3 = plagueButton;
-
-			lightningButton.interactable = false;
-			fireButton.interactable = false;
-			plagueButton.interactable = false;
-		}
+			//tempButton1 = lightningButton;
+			//tempButton2 = fireButton;
+			//tempButton3 = plagueButton;
+            FindObjectOfType<TemporaryCircleDeath>().hasSmashed = true;
+            FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 0; 
+            //lightningButton.interactable = false;
+            //fireButton.interactable = false;
+            //plagueButton.interactable = false;
+        }
 		else if (buttonToCool == lightningButton) 
 		{
-			tempButton1 = fistButton;
-			tempButton2 = fireButton;
-			tempButton3 = plagueButton;
-
-			fistButton.interactable = false;
-			fireButton.interactable = false;
-			plagueButton.interactable = false;
-		}
+			//tempButton1 = fistButton;
+			//tempButton2 = fireButton;
+			//tempButton3 = plagueButton;
+            FindObjectOfType<TemporaryCircleDeath>().hasStruck = true;
+            FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 1;
+            //fistButton.interactable = false;
+            //fireButton.interactable = false;
+            //plagueButton.interactable = false;
+        }
 		else if (buttonToCool == fireButton) 
 		{
-			tempButton1 = lightningButton;
-			tempButton2 = fistButton;
-			tempButton3 = plagueButton;
-
-			lightningButton.interactable = false;
-			fistButton.interactable = false;
-			plagueButton.interactable = false;
-		}
-		else if (buttonToCool == plagueButton) 
+			//tempButton1 = lightningButton;
+			//tempButton2 = fistButton;
+			//tempButton3 = plagueButton;
+            yield return new WaitForSeconds (1);
+            FindObjectOfType<TemporaryCircleDeath>().hasLit = true;
+            FindObjectOfType<TemporaryCircleDeath>().selectedAttack = 2;
+            //lightningButton.interactable = false;
+            //fistButton.interactable = false;
+            //plagueButton.interactable = false;
+        }
+        else if (buttonToCool == plagueButton) 
 		{
-			tempButton1 = lightningButton;
-			tempButton2 = fireButton;
-			tempButton3 = fistButton;
+			//tempButton1 = lightningButton;
+			//tempButton2 = fireButton;
+			//tempButton3 = fistButton;
 
-			lightningButton.interactable = false;
-			fireButton.interactable = false;
-			fistButton.interactable = false;
+			//lightningButton.interactable = false;
+			//fireButton.interactable = false;
+			//fistButton.interactable = false;
 		}
 
-		yield return new WaitForSeconds (5);
+		//yield return new WaitForSeconds (5);
 		buttonToCool.interactable = false;
-		tempButton1.interactable = true;
-		tempButton2.interactable = true;
-		tempButton3.interactable = true;
-		FindObjectOfType<TemporaryCircleDeath> ().enabled = false;
+		//tempButton1.interactable = true;
+		//tempButton2.interactable = true;
+		//tempButton3.interactable = true;
+       
 		yield return new WaitForSeconds (cooldownTimer);
-		buttonToCool.interactable = true;
+        FindObjectOfType<TemporaryCircleDeath>().hasSmashed = false;
+        FindObjectOfType<TemporaryCircleDeath>().hasStruck = false;
+        FindObjectOfType<TemporaryCircleDeath>().hasLit = false;
+        buttonToCool.interactable = true;
 		//FindObjectOfType<TemporaryCircleDeath> ().fist.SetActive (true);
 	}
 }

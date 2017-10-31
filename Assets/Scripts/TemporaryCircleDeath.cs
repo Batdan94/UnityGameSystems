@@ -10,8 +10,13 @@ public class TemporaryCircleDeath : MonoBehaviour {
 
 	public GameObject threat;
 
-    public bool game = true;
+    public GameObject uIManager;
 
+    public bool game = true;
+    public bool hasSmashed = false;
+    public bool hasStruck = false;
+    public bool hasLit = false;
+    public int selectedAttack;  
 	// Use this for initialization
 	void Start () {
 	}
@@ -40,7 +45,6 @@ public class TemporaryCircleDeath : MonoBehaviour {
                 Circle.SetActive(false);
             }
         }
-        
     }
 
     void circleOnPoint(Vector3 point)
@@ -50,23 +54,37 @@ public class TemporaryCircleDeath : MonoBehaviour {
 
     public void attk()
     {
-        var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
-        if (fistInstance.GetComponent<FistController>() != null)
+        if (!hasSmashed)
         {
-            fistInstance.GetComponent<FistController>().circle = Circle;
+            var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
+            if (fistInstance.GetComponent<FistController>() != null)
+            {
+                fistInstance.GetComponent<FistController>().circle = Circle;
+                StartCoroutine(uIManager.GetComponent<UIManager>().buttonCooldown(uIManager.GetComponent<UIManager>().fistButton));
+                Instantiate(threat, new Vector3(Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
+            }
         }
-
-        if (fistInstance.GetComponent<LightningController>() != null)
+        if (!hasStruck)
         {
-            fistInstance.GetComponent<LightningController>().circle = Circle;
+            var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
+            if (fistInstance.GetComponent<LightningController>() != null)
+            {
+                fistInstance.GetComponent<LightningController>().circle = Circle;
+                StartCoroutine(uIManager.GetComponent<UIManager>().buttonCooldown(uIManager.GetComponent<UIManager>().lightningButton));
+                Instantiate(threat, new Vector3(Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
+            }
         }
-
-        if (fistInstance.GetComponent<FireController>() != null)
+        if (!hasLit)
         {
-            fistInstance.GetComponent<FireController>().circle = Circle;
+            var fistInstance = Instantiate(fist, new Vector3(Circle.transform.position.x, 10.0f, Circle.transform.position.z), Quaternion.identity);
+            if (fistInstance.GetComponent<FireController>() != null)
+            {
+                fistInstance.GetComponent<FireController>().circle = Circle;
+                StartCoroutine(uIManager.GetComponent<UIManager>().buttonCooldown(uIManager.GetComponent<UIManager>().fireButton));
+                Instantiate(threat, new Vector3(Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
+            }
         }
-        Instantiate (threat, new Vector3 (Circle.transform.position.x, 0.0f, Circle.transform.position.z), Quaternion.identity);
-        
+        Debug.Log("Has Attacked");
     }
 
     public void attackExp()
@@ -85,7 +103,6 @@ public class TemporaryCircleDeath : MonoBehaviour {
             fistInstance.GetComponent<LightningController>().game = false;
 
         }
-
         if (fistInstance.GetComponent<FireController>() != null)
         {
             fistInstance.GetComponent<FireController>().circle = Circle;
