@@ -230,7 +230,6 @@ public class UIManager : MonoBehaviour
 		FindObjectOfType<TemporaryCircleDeath> ().fist = fist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 0;
 		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		circle.GetComponent<LineRenderer>().enabled = true;
     }
 
 	public void LightningPower()
@@ -241,7 +240,6 @@ public class UIManager : MonoBehaviour
 		FindObjectOfType<TemporaryCircleDeath>().fist = lightningFist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 1;
 		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		circle.GetComponent<LineRenderer>().enabled = true;
     }
 
 	public void firePower()
@@ -252,7 +250,6 @@ public class UIManager : MonoBehaviour
 		FindObjectOfType<TemporaryCircleDeath>().fist = fireFist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 2;
 		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		circle.GetComponent<LineRenderer>().enabled = true;
     }
 
 	public void plaguePower()
@@ -263,7 +260,6 @@ public class UIManager : MonoBehaviour
 		FindObjectOfType<TemporaryCircleDeath>().fist = plagueFist;
 		FindObjectOfType<TemporaryCircleDeath> ().selectedAttack = 3;
 		//FindObjectOfType<TemporaryCircleDeath> ().enabled = true;
-		circle.GetComponent<LineRenderer>().enabled = true;
     }
 
 	public IEnumerator buttonCooldown(Button buttonToCool)
@@ -284,6 +280,7 @@ public class UIManager : MonoBehaviour
         }
         else if (buttonToCool == plagueButton) 
 		{
+			yield return new WaitForSeconds (1);
 			FindObjectOfType<TemporaryCircleDeath>().hasPoisoned = true;
 		}
 
@@ -307,8 +304,10 @@ public class UIManager : MonoBehaviour
 		}
 		else if (buttonToCool == plagueButton) 
 		{
+			yield return new WaitForSeconds (1);
 			FindObjectOfType<TemporaryCircleDeath>().hasPoisoned = false;
 		}
         buttonToCool.interactable = true;
+		circle.GetComponent<LineRenderer>().enabled = true;
 	}
 }
