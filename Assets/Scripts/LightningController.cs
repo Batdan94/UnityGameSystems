@@ -24,7 +24,7 @@ public class LightningController : MonoBehaviour {
         lightning.midPoint = circle.transform.position;
         lightning.endPoint = circle.transform.position;
         lightningSource = GetComponent<AudioSource>();
-
+        StartCoroutine(AudioFadeOut.FadeOut(lightningSource, 1f));
         createLightningFromPoint(circle.transform.position, 10.0f);
     }
 	
@@ -39,7 +39,6 @@ public class LightningController : MonoBehaviour {
 
     void createLightningFromPoint(Vector3 point, float maxDist, GameObject followStart = null)
     {
-        lightningSource.PlayOneShot(lightningSound, 0.1f);
         if (game)
         {
             foreach (var boid in RobotZombieBehaviour.Instance.robotZombies)
