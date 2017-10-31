@@ -37,22 +37,22 @@ public class GameManager : Singleton<GameManager> {
     {
         threats.RemoveAll(threat => threat == null);
 
-		if (!AnyZombosLeft())
+        if (!AnyZombosLeft())
         {
-			//Remove all dead zombos
-            foreach(var ro in BoidsManager.robotZombies)
+            //Remove all dead zombos
+            foreach (var ro in BoidsManager.robotZombies)
             {
                 if (ro.GetComponent<BoidStats>().squished)
                 {
                     DestroyImmediate(ro);
-					numSquished++;
+                    numSquished++;
                 }
             }
             BoidsManager.robotZombies.RemoveAll(zombo => zombo == null);
 
-			//Reset standard values
+            //Reset standard values
             BoidsManager.SetHasAttacked(false);
-            int checkEnoughZombos = 0; 
+            int checkEnoughZombos = 0;
             foreach (var zombo in BoidsManager.robotZombies)
                 if (zombo.active == false)
                 {
@@ -60,10 +60,12 @@ public class GameManager : Singleton<GameManager> {
                     zombo.transform.position = BoidsManager.GetComponent<RobotZombieBehaviour>().getRandomSpawn();
                     zombo.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     zombo.GetComponent<BoidStats>().hasBred = false;
-                    checkEnoughZombos++; 
+                    checkEnoughZombos++;
                 }
             if (checkEnoughZombos < minimumZombies)
-                Application.LoadLevel(3); 
+            { 
+                Application.LoadLevel(3);
+            }
             BoidsManager.GetComponent<RobotZombieBehaviour>().fleeForce = 0; 
             //Breeding
             breeding = true;

@@ -78,17 +78,16 @@ public class UIManager : MonoBehaviour
 
 		cooldownTimer = 1;
 
-		objectives ();
+		NewObjective();
     }
 
     string GenerateObjective(string socialDifference, int difficulty)
     {
-        Random rnd = new Random(); 
         string output = "";
         output += subject[Random.Range(0, 3)] + socialDifference + " people";
         output += predicate[Random.Range(0, 4)];
         output += clause[Random.Range(0, 3)];
-        return output; 
+        return output;
     }
 
     // Update is called once per frame
@@ -98,7 +97,7 @@ public class UIManager : MonoBehaviour
 		updateAlive ();
         updateSliders();
         generationCounter();
-        checkObjective();    
+        checkObjective();
     }
 
     void checkObjective()
@@ -139,8 +138,7 @@ public class UIManager : MonoBehaviour
             x = Random.Range(0, 5);
 
         socialDifferences = (SocialDifferences)x;
-        objectives();
-        Debug.Log("New Objective" + socialDifferences.ToString());
+        objectivesText.text = GenerateObjective(socialDifferences.ToString(), 1);
     }
 	void updateAlive()
 	{
@@ -210,11 +208,6 @@ public class UIManager : MonoBehaviour
         averageSize = (tempSize / count);
 
 		sizeSliderGO.value = (averageSize);
-    }
-
-    void objectives()
-    {
-        objectivesText.text = GenerateObjective(socialDifferences.ToString(), 1); 
     }
 
     void generationCounter()
