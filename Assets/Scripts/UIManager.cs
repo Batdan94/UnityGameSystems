@@ -36,6 +36,8 @@ public class UIManager : MonoBehaviour
 	float averagePopulation;
 	int numberOfSpawned;
 
+	public GameObject gratsText;
+
 	public Circle circle;
 
     //manager references
@@ -64,7 +66,7 @@ public class UIManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
 		wealthSliderGO.minValue = 0;
 		sizeSliderGO.minValue = 0;
 		populationSliderGO.minValue = 0;
@@ -74,7 +76,7 @@ public class UIManager : MonoBehaviour
 		populationSliderGO.maxValue = 10;
 
 		zombieMngr = RobotZombieBehaviour.Instance;
-		numberOfSpawned = zombieMngr.numZombos;
+		//numberOfSpawned = zombieMngr.numZombos;
 
 		cooldownTimer = 1;
 
@@ -102,31 +104,48 @@ public class UIManager : MonoBehaviour
 
     void checkObjective()
     {
+		if (Input.GetKeyDown(KeyCode.W))
+		{
+			NewObjective ();
+			StartCoroutine (ObjectiveJuice ());
+		}
         switch (socialDifferences)
         {
-            case SocialDifferences.Big:
-                if (averageSize < 2)
-                    NewObjective();
+		case SocialDifferences.Big:
+			if (averageSize < 2.0f) {
+				NewObjective ();
+				StartCoroutine (ObjectiveJuice ());
+			}
                 break;
             case SocialDifferences.Small:
-                if (averageSize > 8)
-                    NewObjective();
+			if (averageSize > 8.0f){
+				NewObjective ();
+				StartCoroutine (ObjectiveJuice ());
+			}
                 break;
             case SocialDifferences.Rich:
-                if (averageWealth < 2)
-                    NewObjective();
+			if (averageWealth < 2.0f){
+				NewObjective ();
+				StartCoroutine (ObjectiveJuice ());
+			}
                 break;
             case SocialDifferences.Poor:
-                if (averageWealth > 8)
-                    NewObjective();
+			if (averageWealth > 8.0f){
+				NewObjective ();
+				StartCoroutine (ObjectiveJuice ());
+			}
                 break;
             case SocialDifferences.Robot:
-                if (averageSize < 2)
-                    NewObjective();
+			if (averagePopulation < 2.0f){
+				NewObjective ();
+				StartCoroutine (ObjectiveJuice ());
+			}
                 break;
             case SocialDifferences.Zombie:
-                if (averageSize > 8)
-                    NewObjective();
+			if (averagePopulation > 8.0f){
+				NewObjective ();
+				StartCoroutine (ObjectiveJuice ());
+			}
                 break;
         }
     }
@@ -302,5 +321,24 @@ public class UIManager : MonoBehaviour
 		}
         buttonToCool.interactable = true;
 		circle.GetComponent<LineRenderer>().enabled = true;
+	}
+
+	IEnumerator ObjectiveJuice()
+	{
+		Timer timer = new Timer (2.0f);
+
+		gratsText.SetActive(true);
+		objectivesText.gameObject.SetActive (false);
+
+		while (!timer.Trigger())
+		{
+			yield return new WaitForSeconds (0.1f);
+			gratsText.transform.localScale *= 1.1f;
+		}
+		objectivesText.gameObject.SetActive (true);
+		gratsText.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+		gratsText.SetActive(false);
+
+		yield return null;
 	}
 }

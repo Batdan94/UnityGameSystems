@@ -25,8 +25,8 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 				return null;
 			}
 
-			lock (_lock)
-			{
+			//lock (_lock)
+			//{
 				if (_instance == null)
 				{
 					_instance = (T)FindObjectOfType(typeof(T));
@@ -60,7 +60,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
 				return _instance;
 			}
-		}
+		//}
 	}
 
 	private static bool applicationIsQuitting = false;
@@ -74,6 +74,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	/// </summary>
 	public void OnDestroy()
 	{
-		applicationIsQuitting = true;
+		//applicationIsQuitting = true;
 	}
 }

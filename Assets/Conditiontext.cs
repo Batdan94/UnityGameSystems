@@ -10,12 +10,11 @@ public class Conditiontext : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		text.text = FindObjectOfType<UIManager> ().objectivesText.text;	
+		//text.text = FindObjectOfType<UIManager> ().objectivesText.text;	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		updateText ();
 	}
 
 	void updateText()

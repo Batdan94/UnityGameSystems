@@ -114,7 +114,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
                     else if (rb.velocity.magnitude < minSpeed)
                     {
                         var vel = rb.velocity.normalized * minSpeed;
-                        vel.y = 0.0f;
+                        vel.y = Mathf.Min(0.0f, vel.y);
                         rb.velocity = vel;
                     }
                 }
@@ -211,7 +211,7 @@ public class RobotZombieBehaviour : Singleton<RobotZombieBehaviour>
             float distZ = Mathf.Abs(robotZombies[i].transform.position.z - (plane.transform.localScale.z * 5));
             if (fleeForce < 100)
                 fleeForce = fleeForce + fleeModifier;
-            if (distX < 1 || distZ < 1)
+            if (distX < 2 || distZ < 2)
                 robotZombies[i].SetActive(false);
             if (distX > distZ)
                 fleeDirection = new Vector3(0, 0, fleeForce);
