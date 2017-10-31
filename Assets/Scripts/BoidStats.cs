@@ -35,11 +35,14 @@ public class BoidStats : MonoBehaviour {
     public GameObject lovedOne;
     public GameObject breedingParticles;
     public GameObject fireParts;
+    public GameObject plagueStink;
 
     public Material fryMat1;
     public Material fryMat2;
 
     public GameObject charParticles;
+
+    RobotZombieBehaviour temp;
 
     public bool squished = false;
 
@@ -324,6 +327,42 @@ public class BoidStats : MonoBehaviour {
 
 
         Destroy(fireInstance);
+
+        obj.GetComponent<MeshRenderer>().enabled = false;
+        foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())
+        {
+            rend.enabled = false;
+        }
+        obj.GetComponent<Collider>().enabled = false;
+        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        var part = Instantiate(charParticles, obj.transform.position, Quaternion.identity, obj.transform);
+        part.transform.localScale = transform.localScale;
+        yield return null;
+    }
+
+    public IEnumerator Infect(GameObject obj)
+    {
+        squished = true;
+        var infectInstance = Instantiate(plagueStink, obj.transform);
+        infectInstance.transform.localScale = obj.transform.localScale;
+
+        //Timer timer = new Timer(3.0f);
+        //while (!timer.Trigger())
+        //{
+        //    GetComponent<Rigidbody>().velocity = new Vector3((Random.value - .5f) * 20, 0.0f, (Random.value - .5f) * 20);
+        //    yield return new WaitForSeconds(.5f);
+        //}
+
+        foreach (GameObject rz in temp.robotZombies)
+        {
+            
+            if (Vector3.Distance(obj.transform.position, rz.transform.position) <= 1.0f)
+            {
+                rz.GetComponent<BoidStats>().StartCoroutine(rz.GetComponent<BoidStats>().Infect(rz.gameObject));
+            }
+        }
+
+        Destroy(infectInstance);
 
         obj.GetComponent<MeshRenderer>().enabled = false;
         foreach (var rend in obj.GetComponentsInChildren<MeshRenderer>())

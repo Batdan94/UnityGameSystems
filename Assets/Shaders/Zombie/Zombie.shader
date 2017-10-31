@@ -61,9 +61,9 @@
 		sampler2D _NormalMap;
 		fixed4 _Color;
 
-		//UNITY_INSTANCING_CBUFFER_START(Props)
+		UNITY_INSTANCING_CBUFFER_START(Props)
 			// put more per-instance properties here
-		//UNITY_INSTANCING_CBUFFER_END
+		UNITY_INSTANCING_CBUFFER_END
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			// Albedo comes from a texture tinted by color
