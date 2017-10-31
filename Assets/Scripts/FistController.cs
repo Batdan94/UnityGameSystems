@@ -15,7 +15,7 @@ public class FistController : MonoBehaviour
         fistSource = GetComponent<AudioSource>();
 
         StartCoroutine(raisingFist(gameObject));
-        fistSource.PlayOneShot(fistSound, 0.1f);
+        StartCoroutine(AudioFadeOut.FadeOut(fistSource, 1f)); 
         if (game)
         {
             foreach (var boid in GameManager.Instance.BoidsManager.robotZombies)

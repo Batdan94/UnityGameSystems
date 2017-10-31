@@ -17,13 +17,13 @@ public class FireController : MonoBehaviour {
     Vector3 lastFire;
 
     public AudioSource fireSource;
-    public AudioClip fireSound;
 
     public GameObject firePrefab;
 
     // Use this for initialization
     void Start () {
         fireSource = GetComponent<AudioSource>();
+        StartCoroutine(AudioFadeOut.FadeOut(fireSource, 1f));
         spawningTimer = new Timer(fireSpawnTime);
         lifeTimer = new Timer(fireLifeTime);
         Instantiate(firePrefab, circle.transform.position, Quaternion.identity, this.transform);
@@ -34,7 +34,7 @@ public class FireController : MonoBehaviour {
 	void Update () {
 		if ((spawningTimer.timeLeft > 0.0f))
         {
-            fireSource.PlayOneShot(fireSound, 0.1f);
+           
             if (Vector3.Distance(lastFire, circle.transform.position) > minDistForFire)
             {
                 Instantiate(firePrefab, circle.transform.position, Quaternion.identity, this.transform);

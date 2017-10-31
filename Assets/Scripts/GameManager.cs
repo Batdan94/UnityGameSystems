@@ -60,7 +60,7 @@ public class GameManager : Singleton<GameManager> {
                     zombo.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     zombo.GetComponent<BoidStats>().hasBred = false; 
                 }
-
+            BoidsManager.GetComponent<RobotZombieBehaviour>().fleeForce = 0; 
             //Breeding
             breeding = true;
             foreach(var obj in GameObject.FindGameObjectsWithTag("Attack"))
