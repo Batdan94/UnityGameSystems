@@ -112,37 +112,38 @@ public class UIManager : MonoBehaviour
         switch (socialDifferences)
         {
 		case SocialDifferences.Big:
-			if (averageSize < 2.0f) {
+			if (averageSize < 4.0f) {
 				NewObjective ();
 				StartCoroutine (ObjectiveJuice ());
 			}
                 break;
             case SocialDifferences.Small:
-			if (averageSize > 8.0f){
+			if (averageSize > 6.0f){
 				NewObjective ();
 				StartCoroutine (ObjectiveJuice ());
 			}
                 break;
             case SocialDifferences.Rich:
-			if (averageWealth < 2.0f){
+			if (averageWealth < 4.0f){
 				NewObjective ();
 				StartCoroutine (ObjectiveJuice ());
 			}
                 break;
             case SocialDifferences.Poor:
-			if (averageWealth > 8.0f){
+			if (averageWealth > 6.0f){
 				NewObjective ();
 				StartCoroutine (ObjectiveJuice ());
 			}
                 break;
             case SocialDifferences.Robot:
-			if (averagePopulation < 2.0f){
+			if (averagePopulation > 6.0f)
+                {
 				NewObjective ();
 				StartCoroutine (ObjectiveJuice ());
 			}
                 break;
             case SocialDifferences.Zombie:
-			if (averagePopulation > 8.0f){
+			if (averagePopulation < 4.0f ){
 				NewObjective ();
 				StartCoroutine (ObjectiveJuice ());
 			}
@@ -332,8 +333,8 @@ public class UIManager : MonoBehaviour
 
 		while (!timer.Trigger())
 		{
-			yield return new WaitForSeconds (0.1f);
-			gratsText.transform.localScale *= 1.1f;
+			yield return new WaitForSeconds (0.01f);
+			gratsText.transform.localScale *= 1.01f;
 		}
 		objectivesText.gameObject.SetActive (true);
 		gratsText.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
